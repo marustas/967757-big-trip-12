@@ -1,7 +1,7 @@
 # Личный проект «Большое путешествие» [![Build status][travis-image]][travis-url]
 
 * Студент: [Stas Marudov](https://up.htmlacademy.ru/ecmascript/12/user/967757).
-* Наставник: `Неизвестно`.
+* Наставник: `Алексей Цветков`.
 
 ---
 

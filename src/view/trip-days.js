@@ -1,6 +1,7 @@
 import {MONTHS} from '../constant';
+import {createElement} from '../utils';
 
-export const createTripDaysItem = (tripDay, count) => {
+const createTripDaysItem = (tripDay, count) => {
   const month = MONTHS[new Date(tripDay).getMonth()];
   const dateNum = new Date(tripDay).getDate();
 
@@ -13,3 +14,27 @@ export const createTripDaysItem = (tripDay, count) => {
     </li>`
   );
 };
+
+export class TripDays {
+  constructor(data, count) {
+    this._tripDaysItemData = data;
+    this._count = count;
+    this._elem = null;
+  }
+
+  getTemplate() {
+    return createTripDaysItem(this._tripDaysItemData, this._count);
+  }
+
+  getElement() {
+    if (!this._elem) {
+      this._elem = createElement(this.getTemplate());
+    }
+
+    return this._elem;
+  }
+
+  removeElement() {
+    this._elem = null;
+  }
+}

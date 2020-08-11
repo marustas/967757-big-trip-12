@@ -1,3 +1,4 @@
+
 const getRandomItemFromArray = (arr) => arr[Math.floor(Math.random() * arr.length)];
 
 const getRandomItemsFromArray = (arr, quantity) => {
@@ -46,6 +47,17 @@ const checkEventType = (type, arr) => {
   return isActivityType ? `in` : `to`;
 };
 
+const createElement = (template) => {
+  const newElement = document.createElement(`div`);
+  newElement.innerHTML = template;
+
+  return newElement.firstChild;
+};
+
+const render = (container, element, place) => {
+  container.insertAdjacentElement(place, element);
+};
+
 export {
   getRandomItemFromArray,
   getRandomItemsFromArray,
@@ -56,5 +68,7 @@ export {
   castTimeFormat,
   formatTime,
   timeDuration,
-  checkEventType
+  checkEventType,
+  createElement,
+  render,
 };

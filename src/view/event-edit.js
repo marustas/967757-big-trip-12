@@ -1,5 +1,5 @@
-import {formatTime, checkEventType, castTimeFormat} from '../utils';
 import {TRANSPORT_TYPE, ACTIVITY_TYPE, EVENT_DESTINATION} from '../constant';
+import {formatTime, checkEventType, castTimeFormat, createElement} from '../utils';
 
 const getCheckedStatus = () => (`${Math.random() > 0.5 ? `checked` : ``}`);
 
@@ -47,7 +47,7 @@ const generateOptions = (optValue) => {
     .join(`\n`);
 };
 
-export const createEventEdit = (obj) => {
+const createEventEditTemplate = (obj) => {
   const {type, destinationName, offers, destinationInfo, price, date} = obj;
 
   return (
@@ -127,3 +127,26 @@ export const createEventEdit = (obj) => {
     </form>`
   );
 };
+
+export class TripEventEditItem {
+  constructor(data) {
+    this._tripEventEditItemData = data;
+    this._elem = null;
+  }
+
+  getTemplate() {
+    return createEventEditTemplate(this._tripEventEditItemData);
+  }
+
+  getElement() {
+    if (!this._elem) {
+      this._elem = createElement(this.getTemplate());
+    }
+
+    return this._elem;
+  }
+
+  removeElement() {
+    this._elem = null;
+  }
+}

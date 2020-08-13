@@ -1,17 +1,19 @@
 import {ACTIVITY_TYPE} from '../constant';
 import {formatTime, timeDuration, checkEventType, createElement} from '../utils';
 
-const getEventSelectedOffers = (offerData) => {
-  return offerData.map((item) => (
-    `<li class="event__offer">
-      <span class="event__offer-title">${item.title}</span>
-      &plus; &euro;&nbsp;
-      <span class="event__offer-price">${item.price}</span>
-    </li>`))
+const getEventSelectedOffersTemplate = (offerData) => {
+  return offerData
+    .filter((item) => item.checked)
+    .map((item) => (
+      `<li class="event__offer">
+        <span class="event__offer-title">${item.title}</span>
+        &plus; &euro;&nbsp;
+        <span class="event__offer-price">${item.price}</span>
+      </li>`))
     .join(`\n`);
 };
 
-const createTripEventItem = (obj) => {
+const createTripEventItemTemplate = (obj) => {
   const {type, destinationName, offers, price, date} = obj;
   const eventDuration = timeDuration(date.startDate, date.endDate);
 
@@ -35,7 +37,7 @@ const createTripEventItem = (obj) => {
         </p>
         <h4 class="visually-hidden">Offers:</h4>
         <ul class="event__selected-offers">
-          ${getEventSelectedOffers(offers)}
+          ${getEventSelectedOffersTemplate(offers)}
         </ul>
         <button class="event__rollup-btn" type="button">
           <span class="visually-hidden">Open event</span>
@@ -52,7 +54,7 @@ export default class TripEventItem {
   }
 
   getTemplate() {
-    return createTripEventItem(this._tripEventItemData);
+    return createTripEventItemTemplate(this._tripEventItemData);
   }
 
   getElement() {

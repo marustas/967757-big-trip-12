@@ -1,3 +1,4 @@
+
 import {getRandomItemFromArray, getRandomInt, getRandomNumberFromInterval} from '../utils';
 
 const MAX_TITLE_ITEMS = 5;
@@ -45,6 +46,7 @@ const getOffersArray = (arrayLength) => {
     .map(() => ({
       title: getRandomItemFromArray(eventOfferTitle),
       price: getRandomNumberFromInterval(randomPriceSettings.MIN_PRICE, randomPriceSettings.MAX_PRICE, randomPriceSettings.MULTIPLE),
+      checked: Math.random() > 0.5,
     }));
 };
 

@@ -3,13 +3,13 @@ import {formatTime, checkEventType, castTimeFormat, createElement} from '../util
 
 const getCheckedStatus = () => (`${Math.random() > 0.5 ? `checked` : ``}`);
 
-const getPhoto = (imgSrcArr, destinationName) => {
+const generatePhoto = (imgSrcArr, destinationName) => {
   return imgSrcArr
     .map((item, i) => (`<img class="event__photo" src="${item}" alt="${destinationName} - photo №${i + 1}">`))
     .join(`\n`);
 };
 
-const getEventTypeItems = (eventTypes) => {
+const generateEventTypeItems = (eventTypes) => {
   return eventTypes
     .map((item) => (
       `<div class="event__type-item">
@@ -19,11 +19,11 @@ const getEventTypeItems = (eventTypes) => {
     .join(`\n`);
 };
 
-const getEventOfferSelector = (offerData) => {
+const getEventOfferSelectorTemplate = (offerData) => {
   return offerData
     .map((item, i) => (
       `<div class="event__offer-selector">
-        <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-${i}" type="checkbox" name="event-offer-luggage" ${getCheckedStatus()}>
+        <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-${i}" type="checkbox" name="event-offer-luggage" ${item.checked ? `checked` : ``}>
         <label class="event__offer-label" for="event-offer-luggage-${i}">
           <span class="event__offer-title">${item.title}</span>
             &plus;
@@ -41,7 +41,7 @@ const getDateString = (dateObj) => {
   return `${day}/${month}/${year}`;
 };
 
-const getOptions = (optValue) => {
+const generateOptions = (optValue) => {
   return optValue
     .map((item) => (`<option value="${item}"></option>`))
     .join(`\n`);
@@ -62,11 +62,11 @@ const createEventEditTemplate = (obj) => {
           <div class="event__type-list">
             <fieldset class="event__type-group">
               <legend class="visually-hidden">Transfer</legend>
-              ${getEventTypeItems(TRANSPORT_TYPE)}
+              ${generateEventTypeItems(TRANSPORT_TYPE)}
             </fieldset>
             <fieldset class="event__type-group">
               <legend class="visually-hidden">Activity</legend>
-              ${getEventTypeItems(ACTIVITY_TYPE)}
+              ${generateEventTypeItems(ACTIVITY_TYPE)}
             </fieldset>
           </div>
         </div>
@@ -76,7 +76,7 @@ const createEventEditTemplate = (obj) => {
           </label>
           <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destinationName}" list="destination-list-1">
           <datalist id="destination-list-1">
-            ${getOptions(EVENT_DESTINATION)}
+            ${generateOptions(EVENT_DESTINATION)}
           </datalist>
         </div>
         <div class="event__field-group  event__field-group--time">
@@ -111,7 +111,7 @@ const createEventEditTemplate = (obj) => {
         <section class="event__section  event__section--offers">
           <h3 class="event__section-title  event__section-title--offers">Offers</h3>
           <div class="event__available-offers">
-            ${getEventOfferSelector(offers)}
+            ${getEventOfferSelectorTemplate(offers)}
           </div>
         </section>
         <section class="event__section  event__section--destination">
@@ -119,7 +119,7 @@ const createEventEditTemplate = (obj) => {
           <p class="event__destination-description">${destinationInfo.destinationDescription.join(` `)}</p>
           <div class="event__photos-container">
             <div class="event__photos-tape">
-              ${getPhoto(destinationInfo.destinationPhoto, destinationName)}
+              ${generatePhoto(destinationInfo.destinationPhoto, destinationName)}
             </div>
           </div>
         </section>

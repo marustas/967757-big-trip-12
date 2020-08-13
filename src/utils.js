@@ -1,3 +1,4 @@
+
 const getRandomItemFromArray = (arr) => arr[Math.floor(Math.random() * arr.length)];
 
 const getRandomItemsFromArray = (arr, quantity) => {
@@ -24,7 +25,7 @@ const formatTime = (date) => {
 };
 
 
-function timeDuration(start, end) {
+const timeDuration = (start, end) => {
   const startTime = start.getTime();
   const endTime = end.getTime();
   const diff = endTime - startTime;
@@ -38,12 +39,23 @@ function timeDuration(start, end) {
   };
 
   return `${duration.days}${duration.hours}${duration.minutes}`;
-}
+};
 
 const checkEventType = (type, arr) => {
   const isActivityType = arr.some((item) => item === type);
 
   return isActivityType ? `in` : `to`;
+};
+
+const createElement = (template) => {
+  const newElement = document.createElement(`div`);
+  newElement.innerHTML = template;
+
+  return newElement.firstChild;
+};
+
+const renderElement = (container, element, place) => {
+  container.insertAdjacentElement(place, element);
 };
 
 export {
@@ -56,5 +68,7 @@ export {
   castTimeFormat,
   formatTime,
   timeDuration,
-  checkEventType
+  checkEventType,
+  createElement,
+  renderElement,
 };

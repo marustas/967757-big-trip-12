@@ -6,7 +6,7 @@ const createTripEventsList = () => {
   );
 };
 
-export class TripEventList {
+export default class TripEventList {
   constructor() {
     this._elem = null;
   }

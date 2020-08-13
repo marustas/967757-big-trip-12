@@ -31,7 +31,7 @@ const createSort = () => {
   );
 };
 
-export class Sort {
+export default class Sort {
   constructor() {
     this._elem = null;
   }

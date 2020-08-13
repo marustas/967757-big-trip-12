@@ -20,7 +20,7 @@ const createFilter = () => {
   );
 };
 
-export class Filter {
+export default class Filter {
   constructor() {
     this._elem = null;
   }

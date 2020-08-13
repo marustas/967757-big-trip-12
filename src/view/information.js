@@ -37,7 +37,7 @@ const createInfo = (eventsArray) => {
   );
 };
 
-export class Info {
+export default class Info {
   constructor(data) {
     this._infoData = data;
     this._elem = null;

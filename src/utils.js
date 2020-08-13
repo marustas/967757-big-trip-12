@@ -25,7 +25,7 @@ const formatTime = (date) => {
 };
 
 
-function timeDuration(start, end) {
+const timeDuration = (start, end) => {
   const startTime = start.getTime();
   const endTime = end.getTime();
   const diff = endTime - startTime;
@@ -39,7 +39,7 @@ function timeDuration(start, end) {
   };
 
   return `${duration.days}${duration.hours}${duration.minutes}`;
-}
+};
 
 const checkEventType = (type, arr) => {
   const isActivityType = arr.some((item) => item === type);
@@ -54,7 +54,7 @@ const createElement = (template) => {
   return newElement.firstChild;
 };
 
-const render = (container, element, place) => {
+const renderElement = (container, element, place) => {
   container.insertAdjacentElement(place, element);
 };
 
@@ -70,5 +70,5 @@ export {
   timeDuration,
   checkEventType,
   createElement,
-  render,
+  renderElement,
 };

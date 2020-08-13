@@ -15,7 +15,7 @@ const createTripDaysItem = (tripDay, count) => {
   );
 };
 
-export class TripDays {
+export default class TripDays {
   constructor(data, count) {
     this._tripDaysItemData = data;
     this._count = count;

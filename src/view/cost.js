@@ -8,7 +8,7 @@ const createCostTemplate = () => {
   );
 };
 
-export class Cost {
+export default class Cost {
   constructor() {
     this._elem = null;
   }

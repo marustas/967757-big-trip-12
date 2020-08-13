@@ -1,15 +1,15 @@
 import {POSITION} from './constant';
-import {render} from './utils';
-import {Info} from './view/information';
-import {Cost} from './view/cost';
-import {Menu} from './view/menu';
-import {Filter} from './view/filters';
-import {Sort} from './view/sort';
-import {TripEventItem} from './view/trip-event';
-import {TripEventEditItem} from './view/event-edit';
-import {TripDaysList} from './view/trip-list';
-import {TripDays} from './view/trip-days';
-import {TripEventList} from './view/event-list';
+import {renderElement} from './utils';
+import Info from './view/information';
+import Cost from './view/cost';
+import Menu from './view/menu';
+import Filter from './view/filters';
+import Sort from './view/sort';
+import TripEventItem from './view/trip-event';
+import TripEventEditItem from './view/event-edit';
+import TripDaysList from './view/trip-list';
+import TripDays from './view/trip-days';
+import TripEventList from './view/event-list';
 import {generateTripEventsData} from "./mock/trip-event";
 import {generateTripDays, getTripDaysString} from "./mock/trip-time";
 
@@ -19,25 +19,25 @@ const tripEventItems = generateTripEventsData(TRIP_EVENT_ITEM_QUANTITY);
 const tripDays = generateTripDays(tripEventItems);
 
 const tripMain = document.querySelector(`.trip-main`);
-render(tripMain, new Info(tripEventItems).getElement(), POSITION.AFTERBEGIN);
+renderElement(tripMain, new Info(tripEventItems).getElement(), POSITION.AFTERBEGIN);
 
 const tripMainInfo = tripMain.querySelector(`.trip-main__trip-info`);
-render(tripMainInfo, new Cost().getElement(), POSITION.BEFOREEND);
+renderElement(tripMainInfo, new Cost().getElement(), POSITION.BEFOREEND);
 
 const tripMainControls = tripMain.querySelector(`.trip-main__trip-controls`);
 const tripMainControlsTitle = tripMain.querySelector(`.trip-main__trip-controls h2:first-child`);
-render(tripMainControls, new Filter().getElement(), POSITION.BEFOREEND);
-render(tripMainControlsTitle, new Menu().getElement(), POSITION.AFTEREND);
+renderElement(tripMainControls, new Filter().getElement(), POSITION.BEFOREEND);
+renderElement(tripMainControlsTitle, new Menu().getElement(), POSITION.AFTEREND);
 
 const tripEvents = document.querySelector(`.trip-events`);
 const tripEventsTitle = tripEvents.querySelector(`.trip-events h2:first-child`);
-render(tripEventsTitle, new TripDaysList().getElement(), POSITION.AFTEREND);
-render(tripEventsTitle, new Sort().getElement(), POSITION.AFTEREND);
+renderElement(tripEventsTitle, new TripDaysList().getElement(), POSITION.AFTEREND);
+renderElement(tripEventsTitle, new Sort().getElement(), POSITION.AFTEREND);
 
 const tripDaysList = tripEvents.querySelector(`.trip-days`);
 Array.from(tripDays)
   .forEach((item, i) => {
-    render(tripDaysList, new TripDays(item, i + 1).getElement(), POSITION.BEFOREEND);
+    renderElement(tripDaysList, new TripDays(item, i + 1).getElement(), POSITION.BEFOREEND);
   });
 
 const renderEvent = (eventsContainer, data) => {
@@ -58,12 +58,12 @@ const renderEvent = (eventsContainer, data) => {
   tripEventItemRollupBtn.addEventListener(`click`, onRollupBtnClick);
   tripEventEditForm.addEventListener(`submit`, onEventEditSubmit);
 
-  render(eventsContainer, tripEventItem.getElement(), POSITION.BEFOREEND);
+  renderElement(eventsContainer, tripEventItem.getElement(), POSITION.BEFOREEND);
 };
 
 const tripDaysItem = tripDaysList.querySelectorAll(`.trip-days__item`);
 tripDaysItem.forEach((item) => {
-  render(item, new TripEventList().getElement(), POSITION.BEFOREEND);
+  renderElement(item, new TripEventList().getElement(), POSITION.BEFOREEND);
   const tripEventsList = item.querySelector(`.trip-events__list`);
 
   tripEventItems

@@ -45,7 +45,7 @@ const createTripEventItem = (obj) => {
   );
 };
 
-export class TripEventItem {
+export default class TripEventItem {
   constructor(data) {
     this._tripEventItemData = data;
     this._elem = null;

@@ -9,7 +9,7 @@ const createMenu = () => {
   );
 };
 
-export class Menu {
+export default class Menu {
   constructor() {
     this._elem = null;
   }

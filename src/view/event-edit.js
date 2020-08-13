@@ -3,13 +3,13 @@ import {formatTime, checkEventType, castTimeFormat, createElement} from '../util
 
 const getCheckedStatus = () => (`${Math.random() > 0.5 ? `checked` : ``}`);
 
-const generatePhoto = (imgSrcArr, destinationName) => {
+const getPhoto = (imgSrcArr, destinationName) => {
   return imgSrcArr
     .map((item, i) => (`<img class="event__photo" src="${item}" alt="${destinationName} - photo №${i + 1}">`))
     .join(`\n`);
 };
 
-const generateEventTypeItems = (eventTypes) => {
+const getEventTypeItems = (eventTypes) => {
   return eventTypes
     .map((item) => (
       `<div class="event__type-item">
@@ -41,7 +41,7 @@ const getDateString = (dateObj) => {
   return `${day}/${month}/${year}`;
 };
 
-const generateOptions = (optValue) => {
+const getOptions = (optValue) => {
   return optValue
     .map((item) => (`<option value="${item}"></option>`))
     .join(`\n`);
@@ -62,11 +62,11 @@ const createEventEditTemplate = (obj) => {
           <div class="event__type-list">
             <fieldset class="event__type-group">
               <legend class="visually-hidden">Transfer</legend>
-              ${generateEventTypeItems(TRANSPORT_TYPE)}
+              ${getEventTypeItems(TRANSPORT_TYPE)}
             </fieldset>
             <fieldset class="event__type-group">
               <legend class="visually-hidden">Activity</legend>
-              ${generateEventTypeItems(ACTIVITY_TYPE)}
+              ${getEventTypeItems(ACTIVITY_TYPE)}
             </fieldset>
           </div>
         </div>
@@ -76,7 +76,7 @@ const createEventEditTemplate = (obj) => {
           </label>
           <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destinationName}" list="destination-list-1">
           <datalist id="destination-list-1">
-            ${generateOptions(EVENT_DESTINATION)}
+            ${getOptions(EVENT_DESTINATION)}
           </datalist>
         </div>
         <div class="event__field-group  event__field-group--time">
@@ -119,7 +119,7 @@ const createEventEditTemplate = (obj) => {
           <p class="event__destination-description">${destinationInfo.destinationDescription.join(` `)}</p>
           <div class="event__photos-container">
             <div class="event__photos-tape">
-              ${generatePhoto(destinationInfo.destinationPhoto, destinationName)}
+              ${getPhoto(destinationInfo.destinationPhoto, destinationName)}
             </div>
           </div>
         </section>
@@ -128,7 +128,7 @@ const createEventEditTemplate = (obj) => {
   );
 };
 
-export class TripEventEditItem {
+export default class TripEventEditItem {
   constructor(data) {
     this._tripEventEditItemData = data;
     this._elem = null;

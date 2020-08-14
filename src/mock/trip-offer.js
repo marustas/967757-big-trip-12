@@ -1,7 +1,6 @@
+import {getRandomItemFromArray, getRandomInt, getRandomNumberFromInterval} from '../utils/common';
 
-import {getRandomItemFromArray, getRandomInt, getRandomNumberFromInterval} from '../utils';
-
-const MAX_TITLE_ITEMS = 5;
+const MAX_TITLES = 5;
 
 const eventOfferTitle = [
   `Choose the radio station`,
@@ -46,14 +45,14 @@ const getOffersArray = (arrayLength) => {
     .map(() => ({
       title: getRandomItemFromArray(eventOfferTitle),
       price: getRandomNumberFromInterval(randomPriceSettings.MIN_PRICE, randomPriceSettings.MAX_PRICE, randomPriceSettings.MULTIPLE),
-      checked: Math.random() > 0.5,
+      checked: Math.random() > 0.5
     }));
 };
 
 function generateTripEventOfferData() {
   for (const item in tripEventOfferData) {
     if (tripEventOfferData.hasOwnProperty(item)) {
-      const arrayLength = getRandomInt(MAX_TITLE_ITEMS);
+      const arrayLength = getRandomInt(MAX_TITLES);
       tripEventOfferData[item] = getOffersArray(arrayLength);
     }
   }

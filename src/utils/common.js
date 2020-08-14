@@ -1,4 +1,3 @@
-
 const getRandomItemFromArray = (arr) => arr[Math.floor(Math.random() * arr.length)];
 
 const getRandomItemsFromArray = (arr, quantity) => {
@@ -13,7 +12,7 @@ const getRandomInt = (max, min = 1) => Math.floor(Math.random() * (max - min)) +
 
 const removeDuplicatesFromArray = (arr) => Array.from(new Set(arr));
 
-const getRandomNumberFromInterval = (min, max, multy) => Math.floor(Math.floor(Math.random() * (max - min + 1) + min) / multy) * multy;
+const getRandomNumberFromInterval = (min, max, mult) => Math.floor(Math.floor(Math.random() * (max - min + 1) + min) / mult) * mult;
 
 const castTimeFormat = (value) => value < 10 ? `0${value}` : String(value);
 
@@ -47,17 +46,6 @@ const checkEventType = (type, arr) => {
   return isActivityType ? `in` : `to`;
 };
 
-const createElement = (template) => {
-  const newElement = document.createElement(`div`);
-  newElement.innerHTML = template;
-
-  return newElement.firstChild;
-};
-
-const renderElement = (container, element, place) => {
-  container.insertAdjacentElement(place, element);
-};
-
 export {
   getRandomItemFromArray,
   getRandomItemsFromArray,
@@ -69,6 +57,4 @@ export {
   formatTime,
   timeDuration,
   checkEventType,
-  createElement,
-  renderElement,
 };

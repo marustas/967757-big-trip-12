@@ -1,17 +1,17 @@
-import {getRandom} from '../utils';
+import {getRandom} from '../utils/common';
 
 const dateSettings = {
   MAX_INTERVAL_FOR_START_DAY: 15,
   MIN_INTERVAL_FOR_END_DAY: 0.1,
   MAX_INTERVAL_FOR_END_DAY: 0.2,
-  ONE_DAY_ON_MILLISECONDS: 24 * 3600 * 1000
+  ONE_DAY_ON_MILLISECONDS: 24 * 3600 * 1000,
 };
 
 const getStartDate = () => Date.now() + (getRandom(dateSettings.MAX_INTERVAL_FOR_START_DAY) * dateSettings.ONE_DAY_ON_MILLISECONDS);
 
 const getEndDate = (startDateValue) => startDateValue + (getRandom(dateSettings.MAX_INTERVAL_FOR_END_DAY, dateSettings.MIN_INTERVAL_FOR_END_DAY) * dateSettings.ONE_DAY_ON_MILLISECONDS);
 
-const generateTripEventDateData = () => {
+const generateTripEventDate = () => {
   const startDate = getStartDate();
 
   return {
@@ -31,4 +31,4 @@ const generateTripDays = (eventArr) => {
   return [...new Set(tripDays)];
 };
 
-export {generateTripEventDateData, generateTripDays, getTripDaysString};
+export {generateTripEventDate, generateTripDays, getTripDaysString};

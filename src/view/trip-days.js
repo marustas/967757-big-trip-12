@@ -1,7 +1,7 @@
 import {MONTHS} from '../constant';
-import {createElement} from '../utils';
+import AbstractComponent from "./abstract.js";
 
-const createTripDaysItem = (tripDay, count) => {
+const createTripDaysItemTemplate = (tripDay, count) => {
   const month = MONTHS[new Date(tripDay).getMonth()];
   const dateNum = new Date(tripDay).getDate();
 
@@ -15,26 +15,14 @@ const createTripDaysItem = (tripDay, count) => {
   );
 };
 
-export default class TripDays {
+export default class TripDaysItem extends AbstractComponent {
   constructor(data, count) {
+    super();
     this._tripDaysItemData = data;
     this._count = count;
-    this._elem = null;
   }
 
   getTemplate() {
-    return createTripDaysItem(this._tripDaysItemData, this._count);
-  }
-
-  getElement() {
-    if (!this._elem) {
-      this._elem = createElement(this.getTemplate());
-    }
-
-    return this._elem;
-  }
-
-  removeElement() {
-    this._elem = null;
+    return createTripDaysItemTemplate(this._tripDaysItemData, this._count);
   }
 }

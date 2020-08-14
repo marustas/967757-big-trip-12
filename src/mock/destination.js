@@ -1,5 +1,4 @@
-
-import {getRandomItemsFromArray, getRandomInt} from '../utils';
+import {getRandomItemsFromArray, getRandomInt} from '../utils/common';
 
 const MAX_ITEMS = 5;
 

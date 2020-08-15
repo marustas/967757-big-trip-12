@@ -13,7 +13,7 @@ const ACTIVITY_TYPE = [
   `sightseeing`,
   `restaurant`
 ];
-const EVENT_DESTINATION = [
+const DESTINATION = [
   `Chamonix`,
   `Geneva`,
   `Amsterdam`
@@ -46,4 +46,4 @@ const POSITION = {
   AFTEREND: `afterend`
 };
 
-export {TRANSPORT_TYPE, ACTIVITY_TYPE, EVENT_DESTINATION, MONTHS, PRICE_SETTINGS, POSITION};
+export {TRANSPORT_TYPE, ACTIVITY_TYPE, DESTINATION, MONTHS, PRICE_SETTINGS, POSITION};

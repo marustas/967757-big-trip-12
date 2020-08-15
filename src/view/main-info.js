@@ -1,6 +1,5 @@
-
 import {MONTHS} from '../constant';
-import {createElement} from '../utils';
+import AbstractComponent from "./abstract.js";
 
 const generateTitle = (array) => {
   if (array.length === 1) {
@@ -22,7 +21,7 @@ const generateDates = (array) => {
   return (startMonth === endMonth) ? `${startMonth} ${startDate} — ${endDate}` : `${startDate} ${startMonth} — ${endDate} ${endMonth}`;
 };
 
-const createMainInfo = (eventsArray) => {
+const createMainInfoTemplate = (eventsArray) => {
 
   const sortedEvents = eventsArray
     .slice()
@@ -36,25 +35,13 @@ const createMainInfo = (eventsArray) => {
   );
 };
 
-export default class MainInfo {
+export default class MainInfo extends AbstractComponent {
   constructor(data) {
+    super();
     this._infoData = data;
-    this._elem = null;
   }
 
   getTemplate() {
-    return createMainInfo(this._infoData);
-  }
-
-  getElement() {
-    if (!this._elem) {
-      this._elem = createElement(this.getTemplate());
-    }
-
-    return this._elem;
-  }
-
-  removeElement() {
-    this._elem = null;
+    return createMainInfoTemplate(this._infoData);
   }
 }

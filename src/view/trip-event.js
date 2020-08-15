@@ -1,7 +1,8 @@
 import {ACTIVITY_TYPE} from '../constant';
-import {formatTime, timeDuration, checkEventType, createElement} from '../utils';
+import {formatTime, timeDuration, checkEventType} from '../utils/common';
+import AbstractComponent from "./abstract.js";
 
-const getEventSelectedOffersTemplate = (offerData) => {
+const getEventSelectedOffers = (offerData) => {
   return offerData
     .filter((item) => item.checked)
     .map((item) => (
@@ -13,7 +14,7 @@ const getEventSelectedOffersTemplate = (offerData) => {
     .join(`\n`);
 };
 
-const createTripEventItemTemplate = (obj) => {
+const createTripEventItem = (obj) => {
   const {type, destinationName, offers, price, date} = obj;
   const eventDuration = timeDuration(date.startDate, date.endDate);
 
@@ -37,7 +38,7 @@ const createTripEventItemTemplate = (obj) => {
         </p>
         <h4 class="visually-hidden">Offers:</h4>
         <ul class="event__selected-offers">
-          ${getEventSelectedOffersTemplate(offers)}
+          ${getEventSelectedOffers(offers)}
         </ul>
         <button class="event__rollup-btn" type="button">
           <span class="visually-hidden">Open event</span>
@@ -47,25 +48,18 @@ const createTripEventItemTemplate = (obj) => {
   );
 };
 
-export default class TripEventItem {
+export default class TripEventItem extends AbstractComponent {
   constructor(data) {
+    super();
     this._tripEventItemData = data;
-    this._elem = null;
   }
 
   getTemplate() {
-    return createTripEventItemTemplate(this._tripEventItemData);
+    return createTripEventItem(this._tripEventItemData);
   }
 
-  getElement() {
-    if (!this._elem) {
-      this._elem = createElement(this.getTemplate());
-    }
-
-    return this._elem;
-  }
-
-  removeElement() {
-    this._elem = null;
+  setEditButtonClickHandler(handler) {
+    this.getElement().querySelector(`.event__rollup-btn`)
+      .addEventListener(`click`, handler);
   }
 }

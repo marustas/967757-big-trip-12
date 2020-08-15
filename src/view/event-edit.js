@@ -1,5 +1,6 @@
-import {TRANSPORT_TYPE, ACTIVITY_TYPE, EVENT_DESTINATION} from '../constant';
-import {formatTime, checkEventType, castTimeFormat, createElement} from '../utils';
+import {TRANSPORT_TYPE, ACTIVITY_TYPE, DESTINATION} from '../constant';
+import {formatTime, checkEventType, castTimeFormat} from '../utils/common';
+import AbstractComponent from "./abstract.js";
 
 const getCheckedStatus = () => (`${Math.random() > 0.5 ? `checked` : ``}`);
 
@@ -76,7 +77,7 @@ const createEventEditTemplate = (obj) => {
           </label>
           <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destinationName}" list="destination-list-1">
           <datalist id="destination-list-1">
-            ${generateOptions(EVENT_DESTINATION)}
+            ${generateOptions(DESTINATION)}
           </datalist>
         </div>
         <div class="event__field-group  event__field-group--time">
@@ -128,25 +129,18 @@ const createEventEditTemplate = (obj) => {
   );
 };
 
-export default class TripEventEditItem {
+export default class TripEventEditItem extends AbstractComponent {
   constructor(data) {
+    super();
     this._tripEventEditItemData = data;
-    this._elem = null;
   }
 
   getTemplate() {
     return createEventEditTemplate(this._tripEventEditItemData);
   }
 
-  getElement() {
-    if (!this._elem) {
-      this._elem = createElement(this.getTemplate());
-    }
-
-    return this._elem;
-  }
-
-  removeElement() {
-    this._elem = null;
+  setSubmitHandler(handler) {
+    this.getElement()
+      .addEventListener(`submit`, handler);
   }
 }

@@ -28,7 +28,8 @@ const renderTripMainControls = () => {
   renderElement(tripMainControlsTitle, new Menu(), POSITION.AFTEREND);
 };
 
-const tripEventItems = generateTripEventsData(TRIP_EVENT_ITEM_QUANTITY);
+const tripEventItems = generateTripEventsData(TRIP_EVENT_ITEM_QUANTITY)
+  .sort((a, b) => new Date(a.date.startDate) - new Date(b.date.startDate));
 
 const mainTripListController = new TripController(tripEvents);
 

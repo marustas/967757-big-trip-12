@@ -1,6 +1,6 @@
 
 import {POSITION, renderElement, replaceElement} from '../utils/render';
-import Sort from '../view/sort';
+import Sort, {SORT_TYPE} from '../view/sort';
 import TripEventItem from '../view/trip-event';
 import TripEventEditItem from '../view/event-edit';
 import TripDaysList from '../view/trip-list';
@@ -8,6 +8,25 @@ import TripDaysItem from '../view/trip-days';
 import TripEventList from '../view/event-list';
 import NoPoints from '../view/no-points';
 import {generateTripDays, getTripDaysString} from "../mock/trip-time";
+
+const getSortedEventsData = (eventDataList, sortType) => {
+  let sortedEvents;
+  const showingEvents = eventDataList.slice();
+
+  switch (sortType) {
+    case SORT_TYPE.EVENT:
+      sortedEvents = showingEvents;
+      break;
+    case SORT_TYPE.TIME:
+      sortedEvents = showingEvents.sort((a, b) => (new Date(b.date.endDate) - new Date(b.date.startDate)) - (new Date(a.date.endDate) - new Date(a.date.startDate)));
+      break;
+    case SORT_TYPE.PRICE:
+      sortedEvents = showingEvents.sort((a, b) => b.price - a.price);
+      break;
+  }
+
+  return sortedEvents;
+};
 
 const renderEvent = (eventsContainer, eventItemData) => {
   const tripEventItem = new TripEventItem(eventItemData);
@@ -36,20 +55,15 @@ const renderEvent = (eventsContainer, eventItemData) => {
   renderElement(eventsContainer, tripEventItem, POSITION.BEFOREEND);
 };
 
-const renderTripEventItems = (container, tripDays, eventDataList) => {
-  const tripDaysItem = container.querySelectorAll(`.trip-days__item`);
-  tripDaysItem.forEach((item) => {
-    renderElement(item, new TripEventList(), POSITION.BEFOREEND);
-    const tripEventsList = item.querySelector(`.trip-events__list`);
+const renderTripEventItems = (container, eventDataList, tripDay) => {
+  renderElement(container, new TripEventList(), POSITION.BEFOREEND);
+  const tripEventsList = container.querySelector(`.trip-events__list`);
+  const dataList = tripDay ?
+    eventDataList.slice().filter((eventItem) => getTripDaysString(eventItem) === tripDay) :
+    eventDataList.slice();
 
-    eventDataList
-      .slice()
-      .sort((a, b) => new Date(a.date.startDate) - new Date(b.date.startDate))
-      .filter((eventItem) => getTripDaysString(eventItem) === tripDays[0])
-      .forEach((currentDayEvent) => {
-        renderEvent(tripEventsList, currentDayEvent);
-      });
-    tripDays.shift();
+  dataList.forEach((currentDayEvent) => {
+    renderEvent(tripEventsList, currentDayEvent);
   });
 };
 
@@ -71,14 +85,34 @@ export default class Trip {
       return;
     }
 
-    renderElement(container, this._sortComponent, POSITION.BEFOREEND);
-    renderElement(container, this._tripDaysListComponent, POSITION.BEFOREEND);
-
-    Array.from(tripDays)
-      .forEach((item, i) => {
+    const renderDefaultEvents = () => {
+      tripDays.forEach((item, i) => {
         renderElement(this._tripDaysListComponent.getElement(), new TripDaysItem(item, i + 1), POSITION.BEFOREEND);
       });
 
-    renderTripEventItems(container, tripDays, eventDataList);
+      const tripDaysItem = container.querySelectorAll(`.trip-days__item`);
+      tripDaysItem.forEach((tripDayItem, i) => {
+        renderTripEventItems(tripDayItem, eventDataList, tripDays[i]);
+      });
+    };
+
+    renderElement(container, this._sortComponent, POSITION.BEFOREEND);
+    renderElement(container, this._tripDaysListComponent, POSITION.BEFOREEND);
+    renderDefaultEvents();
+
+    this._sortComponent.setSortTypeChangeHandler((sortType) => {
+      this._sortComponent.getElement().querySelector(`#${sortType}`).checked = true;
+      this._tripDaysListComponent.getElement().innerHTML = ``;
+
+      if (sortType === SORT_TYPE.EVENT) {
+        renderDefaultEvents();
+        return;
+      }
+
+      renderElement(this._tripDaysListComponent.getElement(), new TripDaysItem(), POSITION.BEFOREEND);
+      const dataList = getSortedEventsData(eventDataList, sortType);
+      const newContainer = container.querySelector(`.trip-days__item`);
+      renderTripEventItems(newContainer, dataList);
+    });
   }
 }

@@ -1,10 +1,6 @@
-import AbstractComponent from "./abstract.js";
 
-const SORT_TYPE = {
-  EVENT: `sort-event`,
-  TIME: `sort-time`,
-  PRICE: `sort-price`,
-};
+import AbstractComponent from "./abstract.js";
+import {SORT_TYPE} from '../constant';
 
 const createSort = () => {
   return (

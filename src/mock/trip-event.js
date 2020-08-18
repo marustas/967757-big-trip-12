@@ -13,6 +13,7 @@ const generateTripEventItemData = () => {
   const destinationInfo = generateTripEventDestinationData();
   const price = getRandomNumberFromInterval(PRICE_SETTINGS.MIN_PRICE, PRICE_SETTINGS.MAX_PRICE, PRICE_SETTINGS.MULTIPLE);
   const date = generateTripEventDate();
+  const isFavorite = Math.random() > 0.5;
 
   return {
     type,
@@ -21,6 +22,7 @@ const generateTripEventItemData = () => {
     destinationInfo,
     price,
     date,
+    isFavorite
   };
 };
 

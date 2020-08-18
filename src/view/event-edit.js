@@ -1,8 +1,6 @@
 import {TRANSPORT_TYPE, ACTIVITY_TYPE, DESTINATION} from '../constant';
 import {formatTime, checkEventType, castTimeFormat} from '../utils/common';
-import AbstractComponent from "./abstract.js";
-
-const getCheckedStatus = () => (`${Math.random() > 0.5 ? `checked` : ``}`);
+import Smart from "./smart.js";
 
 const generatePhoto = (imgSrcArr, destinationName) => {
   return imgSrcArr
@@ -49,7 +47,8 @@ const generateOptions = (optValue) => {
 };
 
 const createEventEditTemplate = (obj) => {
-  const {type, destinationName, offers, destinationInfo, price, date} = obj;
+  const {type, destinationName, offers, destinationInfo, price, date, isFavorite} = obj;
+  const favoriteStatus = isFavorite ? `checked` : ``;
 
   return (
     `<form class="trip-events__item  event  event--edit" action="#" method="post">
@@ -100,7 +99,7 @@ const createEventEditTemplate = (obj) => {
         </div>
         <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
         <button class="event__reset-btn" type="reset">Cancel</button>
-        <input id="event-favorite-1" class="event__favorite-checkbox  visually-hidden" type="checkbox" name="event-favorite" ${getCheckedStatus()}>
+        <input id="event-favorite-1" class="event__favorite-checkbox  visually-hidden" type="checkbox" name="event-favorite" ${favoriteStatus}>
         <label class="event__favorite-btn" for="event-favorite-1">
           <span class="visually-hidden">Add to favorite</span>
           <svg class="event__favorite-icon" width="28" height="28" viewBox="0 0 28 28">
@@ -129,18 +128,51 @@ const createEventEditTemplate = (obj) => {
   );
 };
 
-export default class TripEventEditItem extends AbstractComponent {
+export default class TripEventEditItem extends Smart {
   constructor(data) {
     super();
     this._tripEventEditItemData = data;
+    this._submitHandler = null;
+    this._subscribeOnEvents();
   }
 
   getTemplate() {
     return createEventEditTemplate(this._tripEventEditItemData);
   }
 
+  restoreHandlers() {
+    this.setSubmitHandler(this._submitHandler);
+    this._subscribeOnEvents();
+  }
+
+  updateElement() {
+    super.updateElement();
+  }
+
   setSubmitHandler(handler) {
     this.getElement()
       .addEventListener(`submit`, handler);
+
+    this._submitHandler = handler;
   }
+
+  setFavoritesButtonClickHandler(handler) {
+    this.getElement()
+      .querySelector(`.event__favorite-btn`)
+      .addEventListener(`click`, handler);
+  }
+
+  setEventTypeBtnsClickHandler(handler) {
+    this.getElement()
+      .querySelectorAll(`.event__type-label`)
+      .forEach((item) => item.addEventListener(`click`, handler));
+  }
+
+  setDestinationChangeHandler(handler) {
+    this.getElement()
+      .querySelector(`.event__input--destination`)
+      .addEventListener(`change`, handler);
+  }
+
+  _subscribeOnEvents() {}
 }

@@ -69,4 +69,3 @@ export default class Sort extends AbstractComponent {
 }
 
 export {SORT_TYPE};
-

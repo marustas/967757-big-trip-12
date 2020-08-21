@@ -1,5 +1,5 @@
 
-import {POSITION, renderElement, replaceElement} from '../utils/render';
+import {POSITION, renderElement, replaceElement, removeElement} from '../utils/render';
 import TripEventItem from '../view/trip-event';
 import TripEventEditItem from '../view/event-edit';
 
@@ -61,6 +61,8 @@ export default class Point {
     if (oldEventEditComponent && oldEventComponent) {
       replaceElement(this._tripEventItem, oldEventComponent);
       replaceElement(this._tripEventEditItem, oldEventEditComponent);
+      removeElement(oldEventEditComponent);
+      removeElement(oldEventComponent);
     } else {
       renderElement(this._container, this._tripEventItem, POSITION.BEFOREEND);
     }

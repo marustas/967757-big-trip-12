@@ -1,3 +1,4 @@
+
 const POSITION = {
   BEFOREBEGIN: `beforeBegin`,
   AFTERBEGIN: `afterBegin`,

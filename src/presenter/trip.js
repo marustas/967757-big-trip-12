@@ -1,13 +1,13 @@
 
+import {SORT_TYPE} from '../constant';
 import {POSITION, renderElement} from '../utils/render';
-import Sort, {SORT_TYPE} from '../view/sort';
+import Sort from '../view/sort';
 import TripDaysList from '../view/trip-list';
 import TripDaysItem from '../view/trip-days';
 import TripEventList from '../view/event-list';
 import NoPoints from '../view/no-points';
 import Point from "./point.js";
 import {generateTripDays, getTripDaysString} from "../mock/trip-time";
-
 const getSortedEventsData = (eventDataList, sortType) => {
   let sortedEvents;
   const showingEvents = eventDataList.slice();

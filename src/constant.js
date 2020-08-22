@@ -39,11 +39,10 @@ const PRICE_SETTINGS = {
   MULTIPLE: 10
 };
 
-const POSITION = {
-  BEFOREBEGIN: `beforebegin`,
-  AFTERBEGIN: `afterbegin`,
-  BEFOREEND: `beforeend`,
-  AFTEREND: `afterend`
+const SORT_TYPE = {
+  EVENT: `sort-event`,
+  TIME: `sort-time`,
+  PRICE: `sort-price`,
 };
 
-export {TRANSPORT_TYPE, ACTIVITY_TYPE, DESTINATION, MONTHS, PRICE_SETTINGS, POSITION};
+export {TRANSPORT_TYPE, ACTIVITY_TYPE, DESTINATION, MONTHS, PRICE_SETTINGS, SORT_TYPE};

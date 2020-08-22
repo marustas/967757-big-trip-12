@@ -12,7 +12,7 @@ const getRandomInt = (max, min = 1) => Math.floor(Math.random() * (max - min)) +
 
 const removeDuplicatesFromArray = (arr) => Array.from(new Set(arr));
 
-const getRandomNumberFromInterval = (min, max, mult) => Math.floor(Math.floor(Math.random() * (max - min + 1) + min) / mult) * mult;
+const getRandomNumberFromInterval = (min, max, multy) => Math.floor(Math.floor(Math.random() * (max - min + 1) + min) / multy) * multy;
 
 const castTimeFormat = (value) => value < 10 ? `0${value}` : String(value);
 
@@ -23,14 +23,12 @@ const formatTime = (date) => {
   return `${hours}:${minutes}`;
 };
 
-
 const timeDuration = (start, end) => {
-  const startTime = start.getTime();
-  const endTime = end.getTime();
-  const diff = endTime - startTime;
-  const days = new Date(endTime).getDay() - new Date(startTime).getDay();
-  const hours = new Date(endTime).getHours() - new Date(startTime).getHours();
-  const minutes = new Date(diff - (hours * (24 * 3600 * 1000))).getMinutes();
+  const diff = end.getTime() - start.getTime();
+  const minutes = Math.floor(diff / 60000 % 60);
+  const hours = Math.floor(diff / 3600000 % 24);
+  const days = Math.floor(diff / 86400000);
+
   const duration = {
     days: days > 0 ? `${castTimeFormat(days)}D ` : ``,
     hours: hours > 0 ? `${castTimeFormat(hours)}H ` : ``,

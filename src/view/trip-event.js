@@ -2,9 +2,10 @@ import {ACTIVITY_TYPE} from '../constant';
 import {formatTime, timeDuration, checkEventType} from '../utils/common';
 import AbstractComponent from "./abstract.js";
 
-const getEventSelectedOffers = (offerData) => {
+const getEventSelectedOffersTemplate = (offerData) => {
   return offerData
     .filter((item) => item.checked)
+    .slice(0, 3)
     .map((item) => (
       `<li class="event__offer">
         <span class="event__offer-title">${item.title}</span>
@@ -38,7 +39,7 @@ const createTripEventItem = (obj) => {
         </p>
         <h4 class="visually-hidden">Offers:</h4>
         <ul class="event__selected-offers">
-          ${getEventSelectedOffers(offers)}
+          ${getEventSelectedOffersTemplate(offers)}
         </ul>
         <button class="event__rollup-btn" type="button">
           <span class="visually-hidden">Open event</span>

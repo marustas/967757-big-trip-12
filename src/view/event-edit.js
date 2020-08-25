@@ -1,6 +1,11 @@
 import {TRANSPORT_TYPE, ACTIVITY_TYPE, DESTINATION} from '../constant';
 import {formatTime, checkEventType, castTimeFormat} from '../utils/common';
+import {generateTripEventOfferData} from '../mock/trip-offer';
+import {generateTripEventDestinationData} from "../mock/destination";
 import Smart from "./smart.js";
+import flatpickr from "flatpickr";
+import "flatpickr/dist/flatpickr.min.css";
+import "flatpickr/dist/themes/material_blue.css";
 
 const generatePhoto = (imgSrcArr, destinationName) => {
   return imgSrcArr
@@ -46,8 +51,9 @@ const generateOptions = (optValue) => {
     .join(`\n`);
 };
 
-const createEventEditTemplate = (obj) => {
-  const {type, destinationName, offers, destinationInfo, price, date, isFavorite} = obj;
+const createEventEditTemplate = (obj, options) => {
+  const {price, date, isFavorite} = obj;
+  const {eventTypeData, destinationNameData, offers, destinationDescription, destinationPhoto} = options;
   const favoriteStatus = isFavorite ? `checked` : ``;
 
   return (
@@ -56,7 +62,7 @@ const createEventEditTemplate = (obj) => {
         <div class="event__type-wrapper">
           <label class="event__type  event__type-btn" for="event-type-toggle-1">
             <span class="visually-hidden">Choose event type</span>
-            <img class="event__type-icon" width="17" height="17" src="img/icons/${type.toLowerCase()}.png" alt="Event type icon">
+            <img class="event__type-icon" width="17" height="17" src="img/icons/${eventTypeData.toLowerCase()}.png" alt="Event type icon">
           </label>
           <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
           <div class="event__type-list">
@@ -72,9 +78,9 @@ const createEventEditTemplate = (obj) => {
         </div>
         <div class="event__field-group  event__field-group--destination">
           <label class="event__label  event__type-output" for="event-destination-1">
-            ${type} ${checkEventType(type, ACTIVITY_TYPE)}
+            ${eventTypeData} ${checkEventType(eventTypeData, ACTIVITY_TYPE)}
           </label>
-          <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destinationName}" list="destination-list-1">
+          <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destinationNameData}" list="destination-list-1">
           <datalist id="destination-list-1">
             ${generateOptions(DESTINATION)}
           </datalist>
@@ -116,10 +122,10 @@ const createEventEditTemplate = (obj) => {
         </section>
         <section class="event__section  event__section--destination">
           <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-          <p class="event__destination-description">${destinationInfo.destinationDescription.join(` `)}</p>
+          <p class="event__destination-description">${destinationDescription.join(` `)}</p>
           <div class="event__photos-container">
             <div class="event__photos-tape">
-              ${generatePhoto(destinationInfo.destinationPhoto, destinationName)}
+              ${generatePhoto(destinationPhoto, destinationNameData)}
             </div>
           </div>
         </section>
@@ -132,21 +138,78 @@ export default class TripEventEditItem extends Smart {
   constructor(data) {
     super();
     this._tripEventEditItemData = data;
+    this._eventTypeData = data.type;
+    this._destinationName = data.destinationName;
+    this._offersDataArray = data.offers;
+    this._destinationDescription = data.destinationInfo.destinationDescription;
+    this._destinationPhoto = data.destinationInfo.destinationPhoto;
+
     this._submitHandler = null;
+    this._favoriteHandler = null;
+    this._flatpickrStart = null;
+    this._flatpickrEnd = null;
+
     this._subscribeOnEvents();
+    this._applyFlatpickr();
   }
 
   getTemplate() {
-    return createEventEditTemplate(this._tripEventEditItemData);
+    return createEventEditTemplate(this._tripEventEditItemData, {
+      eventTypeData: this._eventTypeData,
+      destinationNameData: this._destinationName,
+      offers: this._offersDataArray,
+      destinationDescription: this._destinationDescription,
+      destinationPhoto: this._destinationPhoto,
+    });
   }
 
-  restoreHandlers() {
-    this.setSubmitHandler(this._submitHandler);
+  recoveryListeners() {
     this._subscribeOnEvents();
   }
 
   updateElement() {
     super.updateElement();
+    this._applyFlatpickr();
+  }
+
+  reset() {
+    const tripEventEditItemData = this._tripEventEditItemData;
+    this._eventTypeData = tripEventEditItemData.type;
+    this._destinationName = tripEventEditItemData.destinationName;
+    this._offersDataArray = tripEventEditItemData.offers;
+    this._destinationDescription = tripEventEditItemData.destinationInfo.destinationDescription;
+    this._destinationPhoto = tripEventEditItemData.destinationInfo.destinationPhoto;
+
+    this.updateElement();
+  }
+
+  _applyFlatpickr() {
+    if (this._flatpickrStart && this._flatpickrEnd) {
+      this._flatpickrStart.destroy();
+      this._flatpickrStart = null;
+      this._flatpickrEnd.destroy();
+      this._flatpickrEnd = null;
+    }
+
+    const startDateElement = this.getElement().querySelector(`.event__input--time[name="event-start-time"]`);
+    this._flatpickrStart = flatpickr(startDateElement, {
+      enableTime: true,
+      altInput: true,
+      allowInput: true,
+      dateFormat: `Y/m/d H:i`,
+      altFormat: `Y/m/d H:i`,
+      defaultDate: this._tripEventEditItemData.date.startDate,
+    });
+
+    const endDateElement = this.getElement().querySelector(`.event__input--time[name="event-end-time"]`);
+    this._flatpickrStart = flatpickr(endDateElement, {
+      enableTime: true,
+      altInput: true,
+      allowInput: true,
+      dateFormat: `Y/m/d H:i`,
+      altFormat: `Y/m/d H:i`,
+      defaultDate: this._tripEventEditItemData.date.endDate,
+    });
   }
 
   setSubmitHandler(handler) {
@@ -160,19 +223,37 @@ export default class TripEventEditItem extends Smart {
     this.getElement()
       .querySelector(`.event__favorite-btn`)
       .addEventListener(`click`, handler);
+
+    this._favoriteHandler = handler;
   }
 
-  setEventTypeBtnsClickHandler(handler) {
-    this.getElement()
-      .querySelectorAll(`.event__type-label`)
-      .forEach((item) => item.addEventListener(`click`, handler));
-  }
+  _subscribeOnEvents() {
+    const element = this.getElement();
 
-  setDestinationChangeHandler(handler) {
-    this.getElement()
-      .querySelector(`.event__input--destination`)
-      .addEventListener(`change`, handler);
-  }
+    this.setSubmitHandler(this._submitHandler);
+    this.setFavoritesButtonClickHandler(this._favoriteHandler);
 
-  _subscribeOnEvents() {}
+    element.querySelectorAll(`.event__type-input`)
+      .forEach((item) => {
+        item.addEventListener(`change`, (evt) => {
+          const newEventTypeData = evt.target.value;
+          this._eventTypeData = newEventTypeData;
+          this._offersDataArray = generateTripEventOfferData()[this._eventTypeData];
+
+          this.updateElement();
+        });
+      });
+
+    element.querySelector(`.event__input--destination`)
+      .addEventListener(`change`, (evt) => {
+        const isRightValue = DESTINATION.some((item) => evt.target.value === item);
+        this._destinationName = isRightValue ? evt.target.value : this._destinationName;
+
+        const destinationInfo = generateTripEventDestinationData();
+        this._destinationDescription = destinationInfo.destinationDescription;
+        this._destinationPhoto = destinationInfo.destinationPhoto;
+
+        this.updateElement();
+      });
+  }
 }

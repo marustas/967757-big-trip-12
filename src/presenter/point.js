@@ -1,5 +1,4 @@
-
-import {POSITION, renderElement, replaceElement, removeElement} from '../utils/render';
+import {POSITION, renderElement, replaceElement} from '../utils/render';
 import TripEventItem from '../view/trip-event';
 import TripEventEditItem from '../view/event-edit';
 
@@ -38,31 +37,14 @@ export default class Point {
     });
 
     this._tripEventEditItem.setFavoritesButtonClickHandler(() => {
-      const newIsFavoriteData = eventItemData.isFavorite;
-      this._onDataChange(this, eventItemData, Object.assign({}, eventItemData, {
-        isFavorite: newIsFavoriteData,
-      }));
-    });
-
-    this._tripEventEditItem.setEventTypeBtnsClickHandler((evt) => {
-      const newEventTypeData = this._tripEventEditItem.getElement().querySelector(`#${evt.target.htmlFor}`).value;
-      this._onDataChange(this, eventItemData, Object.assign({}, eventItemData, {
-        type: newEventTypeData,
-      }));
-    });
-
-    this._tripEventEditItem.setDestinationChangeHandler((evt) => {
-      const newDestinationData = evt.currentTarget.value;
-      this._onDataChange(this, eventItemData, Object.assign({}, eventItemData, {
-        destinationName: newDestinationData,
+      this._onDataChange(eventItemData, Object.assign({}, eventItemData, {
+        isFavorite: !eventItemData.isFavorite,
       }));
     });
 
     if (oldEventEditComponent && oldEventComponent) {
       replaceElement(this._tripEventItem, oldEventComponent);
       replaceElement(this._tripEventEditItem, oldEventEditComponent);
-      removeElement(oldEventEditComponent);
-      removeElement(oldEventComponent);
     } else {
       renderElement(this._container, this._tripEventItem, POSITION.BEFOREEND);
     }
@@ -76,6 +58,7 @@ export default class Point {
 
   _replaceEditToEvent() {
     document.removeEventListener(`keydown`, this._onEscKeyDown);
+    this._tripEventEditItem.reset();
     replaceElement(this._tripEventItem, this._tripEventEditItem);
     this._mode = Mode.DEFAULT;
   }
@@ -90,7 +73,7 @@ export default class Point {
     const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
 
     if (isEscKey) {
-      replaceElement(this._tripEventItem, this._tripEventEditItem);
+      this._replaceEditToEvent();
       document.removeEventListener(`keydown`, this._onEscKeyDown);
     }
   }

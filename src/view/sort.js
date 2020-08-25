@@ -2,7 +2,7 @@
 import AbstractComponent from "./abstract.js";
 import {SORT_TYPE} from '../constant';
 
-const createSort = () => {
+const createSortTemplate = () => {
   return (
     `<form class="trip-events__trip-sort  trip-sort" action="#" method="get">
       <span class="trip-sort__item  trip-sort__item--day">Day</span>
@@ -40,7 +40,7 @@ export default class Sort extends AbstractComponent {
   }
 
   getTemplate() {
-    return createSort();
+    return createSortTemplate();
   }
 
   getSortType() {

@@ -59,6 +59,16 @@ export default class Trip {
     });
   }
 
+  _generateDays(daysArr) {
+    daysArr
+      .slice()
+      .forEach((currentTripDay, count) => {
+        const currentEventData = this._eventsData
+          .filter((eventItem) => getTripDaysString(eventItem) === currentTripDay);
+        this._renderDay(currentEventData, currentTripDay, count);
+      });
+  }
+
   render(eventDataList) {
     this._eventsData = eventDataList;
     this._tripDays = generateTripDays(this._eventsData);
@@ -72,13 +82,7 @@ export default class Trip {
     renderElement(container, this._sortComponent, POSITION.BEFOREEND);
     renderElement(container, this._tripDaysListComponent, POSITION.BEFOREEND);
 
-    this._tripDays
-      .slice()
-      .forEach((currentTripDay, count) => {
-        const currentEventData = this._eventsData
-          .filter((eventItem) => getTripDaysString(eventItem) === currentTripDay);
-        this._renderDay(currentEventData, currentTripDay, count);
-      });
+    this._generateDays(this._tripDays);
   }
 
   _onSortTypeChange(sortType) {
@@ -87,13 +91,7 @@ export default class Trip {
     this._showedEventControllers = [];
 
     if (sortType === SORT_TYPE.EVENT) {
-      this._tripDays
-        .slice()
-        .forEach((currentTripDay, count) => {
-          const currentEventData = this._eventsData
-            .filter((eventItem) => getTripDaysString(eventItem) === currentTripDay);
-          this._renderDay(currentEventData, currentTripDay, count);
-        });
+      this._generateDays(this._tripDays);
       return;
     }
 
@@ -101,7 +99,7 @@ export default class Trip {
     this._renderDay(sortedDataList);
   }
 
-  _onDataChange(taskController, oldData, newData) {
+  _onDataChange(oldData, newData) {
     const index = this._eventsData.findIndex((it) => it === oldData);
 
     if (index === -1) {
@@ -110,7 +108,7 @@ export default class Trip {
 
     this._eventsData = [].concat(this._eventsData.slice(0, index), newData, this._eventsData.slice(index + 1));
 
-    taskController.render(this._eventsData[index]);
+    this._showedEventControllers[index].render(this._eventsData[index]);
   }
 
   _onViewChange() {

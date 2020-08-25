@@ -59,7 +59,7 @@ export default class Trip {
     });
   }
 
-  _generateRenderDays(daysArr) {
+  _generateDays(daysArr) {
     daysArr
       .slice()
       .forEach((currentTripDay, count) => {
@@ -82,7 +82,7 @@ export default class Trip {
     renderElement(container, this._sortComponent, POSITION.BEFOREEND);
     renderElement(container, this._tripDaysListComponent, POSITION.BEFOREEND);
 
-    this._generateRenderDays(this._tripDays);
+    this._generateDays(this._tripDays);
   }
 
   _onSortTypeChange(sortType) {
@@ -91,7 +91,7 @@ export default class Trip {
     this._showedEventControllers = [];
 
     if (sortType === SORT_TYPE.EVENT) {
-      this._generateRenderDays(this._tripDays);
+      this._generateDays(this._tripDays);
       return;
     }
 

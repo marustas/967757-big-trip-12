@@ -1,29 +1,7 @@
 const RenderPosition = {
   AFTERBEGIN: `afterbegin`,
-  AFTEREND: `afterend`,
-  BEFOREBEGIN: `beforebegin`,
   BEFOREEND: `beforeend`,
-};
-/**
- * @param {Element} container an HTML-element like <div> or <span>
- * @param {Function} component a class with a certain constructor and methods. One of them (getTemplate()) returns a template of the component it represents
- * @param {method} place inserts nodes in the certain place of the container
- */
-const render = (container, component, place) => {
-  switch (place) {
-    case RenderPosition.AFTERBEGIN:
-      container.prepend(component.getElement());
-      break;
-    case RenderPosition.AFTEREND:
-      container.after(component.getElement());
-      break;
-    case RenderPosition.BEFOREEND:
-      container.append(component.getElement());
-      break;
-    case RenderPosition.BEFOREBEGIN:
-      container.before(component.getElement());
-      break;
-  }
+  AFTEREND: `afterend`,
 };
 
 const createElement = (template) => {
@@ -31,6 +9,20 @@ const createElement = (template) => {
   newElement.innerHTML = template;
 
   return newElement.firstChild;
+};
+
+const render = (container, component, place = RenderPosition.BEFOREEND) => {
+  switch (place) {
+    case RenderPosition.AFTERBEGIN:
+      container.prepend(component.getElement());
+      break;
+    case RenderPosition.BEFOREEND:
+      container.append(component.getElement());
+      break;
+    case RenderPosition.AFTEREND:
+      container.after(component.getElement());
+      break;
+  }
 };
 
 const replace = (newComponent, oldComponent) => {
@@ -51,9 +43,9 @@ const remove = (component) => {
 };
 
 export {
-  render,
   RenderPosition,
   createElement,
+  render,
   replace,
-  remove,
+  remove
 };

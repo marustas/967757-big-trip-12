@@ -1,61 +1,27 @@
-import {FilterType} from "../constant";
-import {getEventsByFilter} from "../utils/components/filters";
-import {createDaysData} from "../utils/components/trip-day";
+import {getPointsByFilter} from "../utils/filter.js";
+import {FilterType} from "../presenter/filter.js";
 
-export default class Events {
+
+export default class Points {
   constructor() {
-    this._events = [];
-    this._days = [];
-    this._cities = [];
-
+    this._points = [];
     this._activeFilterType = FilterType.EVERYTHING;
 
     this._dataChangeHandlers = [];
     this._filterChangeHandlers = [];
   }
 
-  getEvents() {
-    return getEventsByFilter(this._events, this._activeFilterType);
+  getPoints() {
+    return getPointsByFilter(this._points, this._activeFilterType);
   }
 
-  getEventsAll() {
-    return this._events;
+  getPointsAll() {
+    return this._points;
   }
 
-  setEvents(events) {
-    this._events = Array.from(events);
+  setPoints(points) {
+    this._points = Array.from(points);
     this._callHandlers(this._dataChangeHandlers);
-  }
-
-  getDays() {
-    return this._days;
-  }
-
-  setDays() {
-    this._days = createDaysData(this.getEvents());
-  }
-
-  getCities() {
-    return this._cities;
-  }
-
-  setCities(cities) {
-    this._cities = Array.from(cities);
-  }
-
-  removeEvent(id) {
-    const index = this._events.findIndex((it) => it.id === id);
-
-    if (index === -1) {
-      return false;
-    }
-
-    this._events = [].concat(this._events.slice(0, index), this._events.slice(index + 1));
-
-    this.setDays();
-    this._callHandlers(this._dataChangeHandlers);
-
-    return true;
   }
 
   setFilter(filterType) {
@@ -63,24 +29,18 @@ export default class Events {
     this._callHandlers(this._filterChangeHandlers);
   }
 
-  updateEvent(id, event) {
-    const index = this._events.findIndex((it) => it.id === id);
+  updatePoint(id, point) {
+    const index = this._points.findIndex((it) => it.id === id);
 
     if (index === -1) {
       return false;
     }
 
-    this._events = [].concat(this._events.slice(0, index), event, this._events.slice(index + 1));
+    this._points = [].concat(this._points.slice(0, index), point, this._points.slice(index + 1));
 
     this._callHandlers(this._dataChangeHandlers);
 
     return true;
-  }
-
-  addEvent(event) {
-    this._events = [].concat(event, this._events);
-    this._callHandlers(this._dataChangeHandlers);
-    this.setDays();
   }
 
   setFilterChangeHandler(handler) {
@@ -93,5 +53,26 @@ export default class Events {
 
   _callHandlers(handlers) {
     handlers.forEach((handler) => handler());
+  }
+
+  // Добавление новой точки маршрута;
+  addPoint(point) {
+    this._points = [].concat(point, this._points);
+    this._callHandlers(this._dataChangeHandlers);
+  }
+
+  // Удаление уже имеющейся точки маршрута;
+  removePoint(id) {
+    const index = this._points.findIndex((it) => it.id === id);
+
+    if (index === -1) {
+      return false;
+    }
+
+    this._points = [].concat(this._points.slice(0, index), this._points.slice(index + 1));
+
+    this._callHandlers(this._dataChangeHandlers);
+
+    return true;
   }
 }

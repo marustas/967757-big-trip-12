@@ -1,12 +1,11 @@
-import Abstract from "./abstract.js";
+import AbstractComponent from "./abstract.js";
 
-
-export default class Smart extends Abstract {
-  restoreHandlers() {
-    throw new Error(`Abstract method not implemented: restoreHandlers`);
+export default class AbstractSmartComponent extends AbstractComponent {
+  recoveryListeners() {
+    throw new Error(`Abstract method not implemented: recoveryListeners`);
   }
 
-  updateElement() {
+  rerender() {
     const oldElement = this.getElement();
     const parent = oldElement.parentElement;
 
@@ -16,6 +15,6 @@ export default class Smart extends Abstract {
 
     parent.replaceChild(newElement, oldElement);
 
-    this.restoreHandlers();
+    this.recoveryListeners();
   }
 }

@@ -1,9 +1,8 @@
+import {createElement} from '../utils/render.js';
 
-import {createElement} from "../utils/render";
-
-export default class Abstract {
+export default class AbstractComponent {
   constructor() {
-    if (new.target === Abstract) {
+    if (new.target === AbstractComponent) {
       throw new Error(`Can't instantiate AbstractComponent, only concrete one.`);
     }
 

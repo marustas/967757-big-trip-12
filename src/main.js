@@ -1,36 +1,54 @@
-import RouteAndCost from "../src/view/route-and-cost";
-import SwitchTripView from "../src/view/switch-trip";
-import FilterController from "../src/presenter/filter";
-import TripController from "./presenter/trip";
-import {events as mockedEvents, cities} from "./mock/event";
-import {createRouteAndCostData} from "./utils/components/route-and-cost";
-import {render, RenderPosition} from "./utils/render";
-import EventsModel from "./model/point";
+import TripCostComponent from './view/trip-cost.js';
+import MenuComponent from './view/menu.js';
+import {getPrice} from './utils/common.js';
+import {RenderPosition, render} from './utils/render.js';
+import {generateTripPoints} from './mock/way-point.js';
+import TripController from './presenter/trip-days.js';
+import PointsModel from './model/point.js';
+import FilterController from './presenter/filter.js';
 
-const eventsModel = new EventsModel();
-eventsModel.setEvents(mockedEvents);
-eventsModel.setDays();
-eventsModel.setCities(cities);
+// Общие переменные;
+const randomPointsList = generateTripPoints();
+const headerElement = document.querySelector(`.page-header`);
+const tripMenuElement = headerElement.querySelector(`.trip-main`);
+const newPointButton = headerElement.querySelector(`.trip-main__event-add-btn`);
 
-const routeAndCostList = createRouteAndCostData(mockedEvents);
+const mainElement = document.querySelector(`.page-body__page-main`);
+const tripEventsElement = mainElement.querySelector(`.trip-events`);
 
-const tripMain = document.querySelector(`.trip-main`);
-const tripViewSwitcher = document.querySelector(`.trip-controls h2:first-child`);
-const tripFilters = document.querySelector(`.trip-controls h2:last-child`);
-const tripEventsHeader = document.querySelector(`.trip-events h2`);
-const newEventButton = document.querySelector(`.trip-main__event-add-btn`);
+const pointsList = randomPointsList.slice().sort((a, b) => a.departure > b.departure ? 1 : -1);
+const pointsModel = new PointsModel();
+pointsModel.setPoints(pointsList);
 
-render(tripMain, new RouteAndCost(routeAndCostList), RenderPosition.AFTERBEGIN);
-render(tripViewSwitcher, new SwitchTripView(), RenderPosition.AFTEREND);
-const filterController = new FilterController(tripFilters, eventsModel);
+// Отрисовка пунктов меню: Table, Status;
+const renderTripMenuOptions = () => {
+  const tripSwitchElement = tripMenuElement.querySelector(`.trip-main__trip-controls h2:first-child`);
+  const menuComponent = new MenuComponent();
+  render(tripSwitchElement, menuComponent, RenderPosition.AFTEREND);
+};
+
+renderTripMenuOptions();
+
+// Отрисовка общей цены поездок в шапке (для всех точек маршрута);
+const renderTripCost = () => {
+  const tripCost = getPrice(randomPointsList);
+  render(tripMenuElement, new TripCostComponent(tripCost), RenderPosition.AFTERBEGIN);
+};
+
+renderTripCost();
+
+// Отрисовка отфильтрованных точек маршрута;
+const filterController = new FilterController(mainElement, pointsModel);
 filterController.render();
 
-const tripController = new TripController(tripEventsHeader, eventsModel);
+// Отрисовка информации о днях путешествия;
+const tripController = new TripController(tripEventsElement, pointsModel);
 tripController.render();
 
-newEventButton.addEventListener(`click`, (evt) => {
-  evt.target.disabled = !evt.target.disabled;
+const newPointClickHandler = (evt) => {
+  evt.preventDefault();
+  filterController.setDefaultView();
+  tripController.createPoint(newPointButton);
+};
 
-  tripController.createEvent(evt.target);
-  filterController.setFilterToDefault();
-});
+newPointButton.addEventListener(`click`, newPointClickHandler);

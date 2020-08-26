@@ -1,35 +1,92 @@
 import moment from "moment";
+const DATE_LENGTH = 2;
+const INPUT_DAY_FORMAT = `DD`;
+const INPUT_MONTH_YEAR_FORMAT = `MMM YY`;
+const INPUT_MONTH_DAY_FORMAT = `MMM DD`;
+const INPUT_YEAR_MONTH_DAY_FORMAT = `YYYY-MM-DD`;
+const INPUT_YEAR_MONTH_DAY_TIME_FORMAT = `YYYY-MM-DDTHH:MM`;
+const INPUT_TIME_FORMAT = `HH:mm`;
 
-const getRandomIntegerNumber = (min, max) => {
-  return min + Math.floor(max * Math.random());
+// Корректировка формата времени: добавляет вначале ноль, если число однозначное;
+const correctFormat = (number) => {
+  const date = number.toString();
+
+  if (date.length < DATE_LENGTH) {
+    const newDate = `0` + date;
+    return newDate;
+  }
+
+  return date;
 };
 
-const shuffleArray = (anyArray) => {
-  for (let i = anyArray.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    const temp = anyArray[i];
-    anyArray[i] = anyArray[j];
-    anyArray[j] = temp;
+// Корректировка формата даты: год, день, часы, минуты;
+const correctDayFormat = (date) => {
+  return moment(date).format(INPUT_DAY_FORMAT);
+};
+
+const correctMonthAndYearFormat = (date) => {
+  return moment(date).format(INPUT_MONTH_YEAR_FORMAT);
+};
+
+const correctMonthAndDayFormat = (date) => {
+  return moment(date).format(INPUT_MONTH_DAY_FORMAT);
+};
+
+const correctDateFormat = (date) => {
+  return moment(date).format(INPUT_YEAR_MONTH_DAY_FORMAT);
+};
+
+const correctDateISOFormat = (date) => {
+  return moment(date).format(INPUT_YEAR_MONTH_DAY_TIME_FORMAT);
+};
+
+const correctTimeFormat = (time) => {
+  return moment(time).format(INPUT_TIME_FORMAT);
+};
+
+// Расчет длительности путешествия;
+const calculateTripTime = (departure, arrival) => {
+  const duration = moment.duration(moment(arrival).diff(moment(departure)));
+
+  const durationMinutes = duration.minutes();
+  const durationHours = duration.hours();
+  const durationDays = duration.days();
+
+  if (durationDays < 0 && durationHours < 0) {
+    return `${correctFormat(durationMinutes)}М`;
+  } else if (durationDays <= 0) {
+    return `${correctFormat(durationHours)}H ${correctFormat(durationMinutes)}М`;
+  } else {
+    return `${correctFormat(durationDays)}D ${correctFormat(durationHours)}H ${correctFormat(durationMinutes)}М`;
   }
 };
 
-const getRandomArrayItem = (array) => {
-  const randomIndex = getRandomIntegerNumber(0, array.length);
-  shuffleArray(array);
-  return array[randomIndex];
+// Получение цены путешествия (цена путешествия + цена предложений);
+const getPrice = (wayPoints) => {
+  let tripPrices = 0;
+  let offersPrices = 0;
+
+  for (const wayPoint of wayPoints) {
+    const wayPointPrice = wayPoint.price;
+    const wayPointOffer = wayPoint.offers;
+    tripPrices += wayPointPrice;
+    for (const offer of wayPointOffer) {
+      const offerPrice = offer.price;
+      offersPrices += offerPrice;
+    }
+  }
+
+  return tripPrices + offersPrices;
 };
 
-const capitalize = (anyString) => anyString.replace(/^./, (str) => str.toUpperCase());
-
-const createDateFormat = (date) => moment(date).format(`YYYY-MM-DD`);
-
-const createMonthDayFormat = (date) => moment(date).format(`MMM D`).toUpperCase();
-
 export {
-  getRandomIntegerNumber,
-  getRandomArrayItem,
-  capitalize,
-  shuffleArray,
-  createDateFormat,
-  createMonthDayFormat,
+  correctDateFormat,
+  correctDateISOFormat,
+  correctMonthAndYearFormat,
+  correctMonthAndDayFormat,
+  correctDayFormat,
+  correctTimeFormat,
+  getPrice,
+  calculateTripTime,
+  INPUT_YEAR_MONTH_DAY_FORMAT,
 };

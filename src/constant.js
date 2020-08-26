@@ -1,48 +1,16 @@
+const TYPES_OF_ACTIVITY = [`taxi`, `bus`, `train`, `ship`, `transport`, `drive`, `flight`, `check-in`, `sightseeing`, `restaurant`];
 
-const TRANSPORT_TYPE = [
-  `taxi`,
-  `bus`,
-  `train`,
-  `ship`,
-  `transport`,
-  `drive`,
-  `flight`
-];
-const ACTIVITY_TYPE = [
-  `check-in`,
-  `sightseeing`,
-  `restaurant`
-];
-const DESTINATION = [
-  `Chamonix`,
-  `Geneva`,
-  `Amsterdam`
-];
-const MONTHS = [
-  `JANUARY`,
-  `FEBRUARY`,
-  `MARCH`,
-  `APRIL`,
-  `MAY`,
-  `JUNE`,
-  `JULY`,
-  `AUGUST`,
-  `SEPTEMBER`,
-  `OCTOBER`,
-  `NOVEMBER`,
-  `DECEMBER`
-];
-
-const PRICE_SETTINGS = {
-  MIN_PRICE: 1000,
-  MAX_PRICE: 10000,
-  MULTIPLE: 10
+const ACTIVITIES_BY_TYPE = {
+  transports: [`taxi`, `bus`, `train`, `ship`, `transport`, `drive`, `flight`],
+  places: [`check-in`, `sightseeing`, `restaurant`],
 };
 
-const SORT_TYPE = {
-  EVENT: `sort-event`,
-  TIME: `sort-time`,
-  PRICE: `sort-price`,
+const NUMBER_OF_EVENTS_PER_DAY = 4;
+
+const FilterType = {
+  EVERYTHING: `everything`,
+  FUTURE: `future`,
+  PAST: `past`,
 };
 
-export {TRANSPORT_TYPE, ACTIVITY_TYPE, DESTINATION, MONTHS, PRICE_SETTINGS, SORT_TYPE};
+export {TYPES_OF_ACTIVITY, ACTIVITIES_BY_TYPE, NUMBER_OF_EVENTS_PER_DAY, FilterType};

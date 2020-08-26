@@ -1,6 +1,7 @@
-import AbstractComponent from "./abstract.js";
 
-const createMenu = () => {
+import Abstract from "./abstract";
+
+const createSwitchTripViewMarkup = () => {
   return (
     `<nav class="trip-controls__trip-tabs  trip-tabs">
       <a class="trip-tabs__btn  trip-tabs__btn--active" href="#">Table</a>
@@ -9,8 +10,8 @@ const createMenu = () => {
   );
 };
 
-export default class Menu extends AbstractComponent {
+export default class SwitchTripView extends Abstract {
   getTemplate() {
-    return createMenu();
+    return createSwitchTripViewMarkup();
   }
 }

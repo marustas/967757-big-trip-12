@@ -1,27 +1,37 @@
-import {formatDate} from '../utils/common';
-import AbstractComponent from "./abstract.js";
+import Abstract from "./abstract";
+import {createDateFormat, createMonthDayFormat} from "../utils/common";
 
-const createTripDaysItem = (tripDay, count) => {
-  const date = tripDay ? formatDate(new Date(tripDay)) : ``;
+const createDayInfoMarkup = (day) => {
+  return (
+    `<span class="day__counter">${day.dayNumber}</span>
+     <time class="day__date" datetime="${createDateFormat(day.date)}">${createMonthDayFormat(day.date)}</time>`
+  );
+};
 
+const createTripDayMarkup = (day) => {
+  const dayInfoMarkup = day ? createDayInfoMarkup(day) : ``;
   return (
     `<li class="trip-days__item  day">
       <div class="day__info">
-        <span class="day__counter">${count}</span>
-        <time class="day__date" datetime="${tripDay}">${date}</time>
+        ${dayInfoMarkup}
       </div>
+      <ul class="trip-events__list"></ul>
     </li>`
   );
 };
 
-export default class TripDays extends AbstractComponent {
-  constructor(data, count) {
+export default class TripDay extends Abstract {
+  constructor(day) {
     super();
-    this._tripDaysItemData = data || ``;
-    this._count = count || ``;
+
+    this._day = day;
   }
 
   getTemplate() {
-    return createTripDaysItem(this._tripDaysItemData, this._count);
+    return createTripDayMarkup(this._day);
+  }
+
+  getEventsList() {
+    return this.getElement().querySelector(`.trip-events__list`);
   }
 }

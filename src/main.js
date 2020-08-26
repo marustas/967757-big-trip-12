@@ -1,38 +1,36 @@
-import {POSITION, renderElement} from './utils/render';
-import InfoContainer from './view/info-container';
-import MainInfo from './view/main-info';
-import Cost from './view/cost';
-import Menu from './view/menu';
-import Filter from './view/filters';
-import TripController from './presenter/trip';
-import {generateTripEventsData} from "./mock/trip-event";
+import RouteAndCostComponent from "../src/view/route-and-cost";
+import SwitchTripViewComponent from "../src/view/switch-trip";
+import FilterController from "../src/presenter/filter";
+import TripController from "./presenter/trip";
+import {events as mockedEvents, cities} from "./mock/event";
+import {createRouteAndCostData} from "./utils/components/route-and-cost";
+import {render, RenderPosition} from "./utils/render";
+import EventsModel from "./models/events";
 
-const TRIP_EVENT_ITEM_QUANTITY = 20;
+const eventsModel = new EventsModel();
+eventsModel.setEvents(mockedEvents);
+eventsModel.setDays();
+eventsModel.setCities(cities);
+
+const routeAndCostList = createRouteAndCostData(mockedEvents);
+
 const tripMain = document.querySelector(`.trip-main`);
-const tripEvents = document.querySelector(`.trip-events`);
+const tripViewSwitcher = document.querySelector(`.trip-controls h2:first-child`);
+const tripFilters = document.querySelector(`.trip-controls h2:last-child`);
+const tripEventsHeader = document.querySelector(`.trip-events h2`);
+const newEventButton = document.querySelector(`.trip-main__event-add-btn`);
 
-const renderInfo = (infoData) => {
-  const infoContainer = new InfoContainer();
-  renderElement(tripMain, infoContainer, POSITION.AFTERBEGIN);
-  renderElement(infoContainer.getElement(), new Cost(), POSITION.BEFOREEND);
-  if (infoData.length) {
-    renderElement(tripMain, new MainInfo(infoData), POSITION.AFTERBEGIN);
-  }
-};
+render(tripMain, new RouteAndCostComponent(routeAndCostList), RenderPosition.AFTERBEGIN);
+render(tripViewSwitcher, new SwitchTripViewComponent(), RenderPosition.AFTEREND);
+const filterController = new FilterController(tripFilters, eventsModel);
+filterController.render();
 
-const renderTripMainControls = () => {
-  const tripMainControls = tripMain.querySelector(`.trip-main__trip-controls`);
-  const tripMainControlsTitle = tripMain.querySelector(`.trip-main__trip-controls h2:first-child`);
+const tripController = new TripController(tripEventsHeader, eventsModel);
+tripController.render();
 
-  renderElement(tripMainControls, new Filter(), POSITION.BEFOREEND);
-  renderElement(tripMainControlsTitle, new Menu(), POSITION.AFTEREND);
-};
+newEventButton.addEventListener(`click`, (evt) => {
+  evt.target.disabled = !evt.target.disabled;
 
-const tripEventItems = generateTripEventsData(TRIP_EVENT_ITEM_QUANTITY)
-  .sort((a, b) => new Date(a.date.startDate) - new Date(b.date.startDate));
-
-const mainTripListController = new TripController(tripEvents);
-
-renderTripMainControls();
-renderInfo(tripEventItems);
-mainTripListController.render(tripEventItems);
+  tripController.createEvent(evt.target);
+  filterController.setFilterToDefault();
+});

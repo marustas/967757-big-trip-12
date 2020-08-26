@@ -1,14 +1,14 @@
 
-import AbstractComponent from "./abstract.js";
+import Abstract from "./abstract";
 
-const createTripDaysListTemplate = () => {
+const createTripDaysMarkup = () => {
   return (
     `<ul class="trip-days"></ul>`
   );
 };
 
-export default class TripDaysList extends AbstractComponent {
+export default class TripDays extends Abstract {
   getTemplate() {
-    return createTripDaysListTemplate();
+    return createTripDaysMarkup();
   }
 }

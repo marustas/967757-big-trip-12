@@ -1,71 +1,51 @@
+import Abstract from "./abstract";
+import {SortType} from "../utils/components/sort";
+import {capitalize} from "../utils/common";
 
-import AbstractComponent from "./abstract.js";
-import {SORT_TYPE} from '../constant';
+const createSortMarkup = (sort) => {
+  const {name, checked} = sort;
 
-const createSortTemplate = () => {
+  return (
+    `<div class="trip-sort__item  trip-sort__item--${name}">
+      <input id="sort-${name}" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-${name}"
+        ${checked ? `checked` : ``}>
+      <label class="trip-sort__btn" for="sort-${name}" data-sort-type="${name}">
+      ${capitalize(name)}
+      ${name !== SortType.DEFAULT ?
+      `<svg class="trip-sort__direction-icon" width="8" height="10" viewBox="0 0 8 10">
+          <path d="M2.888 4.852V9.694H5.588V4.852L7.91 5.068L4.238 0.00999987L0.548 5.068L2.888 4.852Z"></path>
+       </svg>` : ``}
+      </label>
+    </div>`
+  );
+};
+
+const createSortsMarkup = (sorts) => {
+  const sortsMarkup = sorts.map((it) => createSortMarkup(it)).join(`\n`);
   return (
     `<form class="trip-events__trip-sort  trip-sort" action="#" method="get">
       <span class="trip-sort__item  trip-sort__item--day">Day</span>
-      <div class="trip-sort__item  trip-sort__item--event">
-        <input id="${SORT_TYPE.EVENT}" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="${SORT_TYPE.EVENT}" checked>
-        <label class="trip-sort__btn" for="sort-event">Event</label>
-      </div>
-      <div class="trip-sort__item  trip-sort__item--time">
-        <input id="${SORT_TYPE.TIME}" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="${SORT_TYPE.TIME}">
-        <label class="trip-sort__btn" for="sort-time">
-          Time
-          <svg class="trip-sort__direction-icon" width="8" height="10" viewBox="0 0 8 10">
-            <path d="M2.888 4.852V9.694H5.588V4.852L7.91 5.068L4.238 0.00999987L0.548 5.068L2.888 4.852Z"/>
-          </svg>
-        </label>
-      </div>
-      <div class="trip-sort__item  trip-sort__item--price">
-        <input id="${SORT_TYPE.PRICE}" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="${SORT_TYPE.PRICE}">
-        <label class="trip-sort__btn" for="sort-price">
-          Price
-          <svg class="trip-sort__direction-icon" width="8" height="10" viewBox="0 0 8 10">
-            <path d="M2.888 4.852V9.694H5.588V4.852L7.91 5.068L4.238 0.00999987L0.548 5.068L2.888 4.852Z"/>
-          </svg>
-        </label>
-      </div>
+        ${sortsMarkup}
       <span class="trip-sort__item  trip-sort__item--offers">Offers</span>
     </form>`
   );
 };
 
-export default class Sort extends AbstractComponent {
-  constructor() {
+export default class Sort extends Abstract {
+  constructor(sorts) {
     super();
-    this._currentSortType = SORT_TYPE.EVENT;
+
+    this._sorts = sorts;
   }
 
   getTemplate() {
-    return createSortTemplate();
+    return createSortsMarkup(this._sorts);
   }
 
-  getSortType() {
-    return this._currentSortType;
-  }
-
-  setSortTypeChangeHandler(handler) {
+  setSortChangeHandler(handler) {
     this.getElement().addEventListener(`click`, (evt) => {
-      evt.preventDefault();
-
-      if (evt.target.tagName.toLowerCase() !== `label`) {
-        return;
-      }
-
-      const sortType = evt.target.htmlFor;
-
-      if (this._currentSortType === sortType) {
-        return;
-      }
-
-      this._currentSortType = sortType;
-
-      handler(this._currentSortType);
+      const sortType = evt.target.dataset.sortType;
+      handler(sortType);
     });
   }
 }
-
-export {SORT_TYPE};

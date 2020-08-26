@@ -1,9 +1,29 @@
-
-const POSITION = {
-  BEFOREBEGIN: `beforeBegin`,
-  AFTERBEGIN: `afterBegin`,
-  BEFOREEND: `beforeEnd`,
-  AFTEREND: `afterEnd`,
+const RenderPosition = {
+  AFTERBEGIN: `afterbegin`,
+  AFTEREND: `afterend`,
+  BEFOREBEGIN: `beforebegin`,
+  BEFOREEND: `beforeend`,
+};
+/**
+ * @param {Element} container an HTML-element like <div> or <span>
+ * @param {Function} component a class with a certain constructor and methods. One of them (getTemplate()) returns a template of the component it represents
+ * @param {method} place inserts nodes in the certain place of the container
+ */
+const render = (container, component, place) => {
+  switch (place) {
+    case RenderPosition.AFTERBEGIN:
+      container.prepend(component.getElement());
+      break;
+    case RenderPosition.AFTEREND:
+      container.after(component.getElement());
+      break;
+    case RenderPosition.BEFOREEND:
+      container.append(component.getElement());
+      break;
+    case RenderPosition.BEFOREBEGIN:
+      container.before(component.getElement());
+      break;
+  }
 };
 
 const createElement = (template) => {
@@ -13,25 +33,27 @@ const createElement = (template) => {
   return newElement.firstChild;
 };
 
-const renderElement = (container, component, place) => {
-  container.insertAdjacentElement(place, component.getElement());
-};
+const replace = (newComponent, oldComponent) => {
+  const parentElement = oldComponent.getElement().parentElement;
+  const newElement = newComponent.getElement();
+  const oldElement = oldComponent.getElement();
 
-const replaceElement = (newComponent, oldComponent) => {
-  const newElem = newComponent.getElement();
-  const oldElem = oldComponent.getElement();
-  const parentContainer = oldElem.parentElement;
+  const isExistElements = !!(parentElement && newElement && oldElement);
 
-  const isExistElements = !!(parentContainer && newElem && oldElem);
-
-  if (isExistElements) {
-    parentContainer.replaceChild(newElem, oldElem);
+  if (isExistElements && parentElement.contains(oldElement)) {
+    parentElement.replaceChild(newElement, oldElement);
   }
 };
 
-const removeElement = (component) => {
-  component.remove();
+const remove = (component) => {
+  component.getElement().remove();
   component.removeElement();
 };
 
-export {POSITION, createElement, renderElement, replaceElement, removeElement};
+export {
+  render,
+  RenderPosition,
+  createElement,
+  replace,
+  remove,
+};

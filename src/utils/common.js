@@ -1,56 +1,92 @@
-import moment from 'moment';
+import moment from "moment";
+const DATE_LENGTH = 2;
+const INPUT_DAY_FORMAT = `DD`;
+const INPUT_MONTH_YEAR_FORMAT = `MMM YY`;
+const INPUT_MONTH_DAY_FORMAT = `MMM DD`;
+const INPUT_YEAR_MONTH_DAY_FORMAT = `YYYY-MM-DD`;
+const INPUT_YEAR_MONTH_DAY_TIME_FORMAT = `YYYY-MM-DDTHH:MM`;
+const INPUT_TIME_FORMAT = `HH:mm`;
 
-const getRandomItemFromArray = (arr) => arr[Math.floor(Math.random() * arr.length)];
+// Корректировка формата времени: добавляет вначале ноль, если число однозначное;
+const correctFormat = (number) => {
+  const date = number.toString();
 
-const getRandomItemsFromArray = (arr, quantity) => {
-  const randomItems = arr.map(() => getRandomItemFromArray(arr)).slice(0, quantity);
+  if (date.length < DATE_LENGTH) {
+    const newDate = `0` + date;
+    return newDate;
+  }
 
-  return removeDuplicatesFromArray(randomItems);
+  return date;
 };
 
-const getRandom = (max, min = 1) => Math.random() * (max - min) + min;
-
-const getRandomInt = (max, min = 1) => Math.floor(Math.random() * (max - min)) + min;
-
-const removeDuplicatesFromArray = (arr) => Array.from(new Set(arr));
-
-const getRandomNumberFromInterval = (min, max, multy) => Math.floor(Math.floor(Math.random() * (max - min + 1) + min) / multy) * multy;
-
-const castTimeFormat = (value) => value < 10 ? `0${value}` : String(value);
-
-const formatTime = (date) => moment(date).format(`hh:mm`);
-
-const formatDate = (date) => moment(date).format(`DD MMMM`);
-
-const timeDuration = (start, end) => {
-  const momentDiff = moment(end).diff(moment(start));
-  const momentDuration = moment.duration(momentDiff);
-
-  const duration = {
-    days: momentDuration.get(`days`) > 0 ? `${castTimeFormat(momentDuration.get(`days`))}D` : ``,
-    hours: momentDuration.get(`hours`) > 0 ? `${castTimeFormat(momentDuration.get(`hours`))}H` : ``,
-    minutes: momentDuration.get(`minutes`) > 0 ? `${castTimeFormat(momentDuration.get(`minutes`))}M` : ``,
-  };
-
-  return `${duration.days} ${duration.hours} ${duration.minutes}`;
+// Корректировка формата даты: год, день, часы, минуты;
+const correctDayFormat = (date) => {
+  return moment(date).format(INPUT_DAY_FORMAT);
 };
 
-const checkEventType = (type, arr) => {
-  const isActivityType = arr.some((item) => item === type);
+const correctMonthAndYearFormat = (date) => {
+  return moment(date).format(INPUT_MONTH_YEAR_FORMAT);
+};
 
-  return isActivityType ? `in` : `to`;
+const correctMonthAndDayFormat = (date) => {
+  return moment(date).format(INPUT_MONTH_DAY_FORMAT);
+};
+
+const correctDateFormat = (date) => {
+  return moment(date).format(INPUT_YEAR_MONTH_DAY_FORMAT);
+};
+
+const correctDateISOFormat = (date) => {
+  return moment(date).format(INPUT_YEAR_MONTH_DAY_TIME_FORMAT);
+};
+
+const correctTimeFormat = (time) => {
+  return moment(time).format(INPUT_TIME_FORMAT);
+};
+
+// Расчет длительности путешествия;
+const calculateTripTime = (departure, arrival) => {
+  const duration = moment.duration(moment(arrival).diff(moment(departure)));
+
+  const durationMinutes = duration.minutes();
+  const durationHours = duration.hours();
+  const durationDays = duration.days();
+
+  if (durationDays < 0 && durationHours < 0) {
+    return `${correctFormat(durationMinutes)}М`;
+  } else if (durationDays <= 0) {
+    return `${correctFormat(durationHours)}H ${correctFormat(durationMinutes)}М`;
+  } else {
+    return `${correctFormat(durationDays)}D ${correctFormat(durationHours)}H ${correctFormat(durationMinutes)}М`;
+  }
+};
+
+// Получение цены путешествия (цена путешествия + цена предложений);
+const getPrice = (wayPoints) => {
+  let tripPrices = 0;
+  let offersPrices = 0;
+
+  for (const wayPoint of wayPoints) {
+    const wayPointPrice = wayPoint.price;
+    const wayPointOffer = wayPoint.offers;
+    tripPrices += wayPointPrice;
+    for (const offer of wayPointOffer) {
+      const offerPrice = offer.price;
+      offersPrices += offerPrice;
+    }
+  }
+
+  return tripPrices + offersPrices;
 };
 
 export {
-  getRandomItemFromArray,
-  getRandomItemsFromArray,
-  getRandom,
-  getRandomInt,
-  removeDuplicatesFromArray,
-  getRandomNumberFromInterval,
-  castTimeFormat,
-  formatTime,
-  formatDate,
-  timeDuration,
-  checkEventType,
+  correctDateFormat,
+  correctDateISOFormat,
+  correctMonthAndYearFormat,
+  correctMonthAndDayFormat,
+  correctDayFormat,
+  correctTimeFormat,
+  getPrice,
+  calculateTripTime,
+  INPUT_YEAR_MONTH_DAY_FORMAT,
 };

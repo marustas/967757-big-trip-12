@@ -1,4 +1,4 @@
-import {createElement} from '../utils/render';
+import {createElement} from '../utils/render.js';
 
 export default class AbstractComponent {
   constructor() {
@@ -6,7 +6,7 @@ export default class AbstractComponent {
       throw new Error(`Can't instantiate AbstractComponent, only concrete one.`);
     }
 
-    this._elem = null;
+    this._element = null;
   }
 
   getTemplate() {
@@ -14,14 +14,14 @@ export default class AbstractComponent {
   }
 
   getElement() {
-    if (!this._elem) {
-      this._elem = createElement(this.getTemplate());
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
     }
 
-    return this._elem;
+    return this._element;
   }
 
   removeElement() {
-    this._elem = null;
+    this._element = null;
   }
 }

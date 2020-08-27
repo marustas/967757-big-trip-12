@@ -1,9 +1,7 @@
-
-const POSITION = {
-  BEFOREBEGIN: `beforeBegin`,
-  AFTERBEGIN: `afterBegin`,
-  BEFOREEND: `beforeEnd`,
-  AFTEREND: `afterEnd`,
+const RenderPosition = {
+  AFTERBEGIN: `afterbegin`,
+  BEFOREEND: `beforeend`,
+  AFTEREND: `afterend`,
 };
 
 const createElement = (template) => {
@@ -13,25 +11,41 @@ const createElement = (template) => {
   return newElement.firstChild;
 };
 
-const renderElement = (container, component, place) => {
-  container.insertAdjacentElement(place, component.getElement());
-};
-
-const replaceElement = (newComponent, oldComponent) => {
-  const newElem = newComponent.getElement();
-  const oldElem = oldComponent.getElement();
-  const parentContainer = oldElem.parentElement;
-
-  const isExistElements = !!(parentContainer && newElem && oldElem);
-
-  if (isExistElements) {
-    parentContainer.replaceChild(newElem, oldElem);
+const render = (container, component, place = RenderPosition.BEFOREEND) => {
+  switch (place) {
+    case RenderPosition.AFTERBEGIN:
+      container.prepend(component.getElement());
+      break;
+    case RenderPosition.BEFOREEND:
+      container.append(component.getElement());
+      break;
+    case RenderPosition.AFTEREND:
+      container.after(component.getElement());
+      break;
   }
 };
 
-const removeElement = (component) => {
-  component.remove();
+const replace = (newComponent, oldComponent) => {
+  const parentElement = oldComponent.getElement().parentElement;
+  const newElement = newComponent.getElement();
+  const oldElement = oldComponent.getElement();
+
+  const isExistElements = !!(parentElement && newElement && oldElement);
+
+  if (isExistElements && parentElement.contains(oldElement)) {
+    parentElement.replaceChild(newElement, oldElement);
+  }
+};
+
+const remove = (component) => {
+  component.getElement().remove();
   component.removeElement();
 };
 
-export {POSITION, createElement, renderElement, replaceElement, removeElement};
+export {
+  RenderPosition,
+  createElement,
+  render,
+  replace,
+  remove
+};

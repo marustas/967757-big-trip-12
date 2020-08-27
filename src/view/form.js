@@ -1,5 +1,12 @@
 import AbstractSmartComponent from "./smart.js";
-import {DESTINATIONS, TRIP_TYPES, STOP_TYPES, generateOffers, generateOfferKeys, generateDescription} from '../mock/way-point.js';
+import {
+  DESTINATIONS,
+  generateDescription,
+  generateOfferKeys,
+  generateOffers,
+  STOP_TYPES,
+  TRIP_TYPES,
+} from '../mock/way-point.js';
 import {Mode as PointControllerMode} from '../presenter/trip-point.js';
 import flatpickr from "flatpickr";
 
@@ -43,7 +50,9 @@ const createFormTemplate = (currentPoint, mode) => {
   };
 
   // Выводит в форму цену поездки
-  const checkedOffers = currentPoint.offers.filter((offer) => offer.isChecked === true);
+  const checkedOffers = currentPoint.offers.filter((offer) =>{
+    return (offer.isChecked);
+  });
 
   const getTripPrice = checkedOffers.reduce((prev, acc) => prev + acc.price, price);
 
@@ -99,7 +108,7 @@ const createFormTemplate = (currentPoint, mode) => {
     return ``;
   };
 
-  const getDeleteOrCandel = () => {
+  const getDeleteOrCancel = () => {
     if (mode !== PointControllerMode.ADDING) {
       return (
         `<button class="event__reset-btn" type="reset">Delete</button>`
@@ -117,9 +126,8 @@ const createFormTemplate = (currentPoint, mode) => {
           <span class="visually-hidden">Open event</span>
         </button>`
       );
-    } else {
-      return ``;
     }
+    return ``;
   };
 
   return (
@@ -170,7 +178,7 @@ const createFormTemplate = (currentPoint, mode) => {
             <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${getTripPrice}">
           </div>
           <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-          ${getDeleteOrCandel()}
+          ${getDeleteOrCancel()}
           ${getFavorite()}
           ${getRollUpMarkUp()}
         </header>
@@ -216,7 +224,7 @@ const parseFormData = (formData, form, point) => {
     return new Date(date[2], date[1] - 1, date[0], time[0], time[1]);
   };
 
-  const formObject = {
+  return {
     id: point.id,
     type: type[0],
     destination,
@@ -227,8 +235,6 @@ const parseFormData = (formData, form, point) => {
     departure: getNewDate(departure),
     arrival: getNewDate(arrival),
   };
-
-  return formObject;
 };
 
 export default class Form extends AbstractSmartComponent {

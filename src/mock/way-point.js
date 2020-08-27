@@ -64,7 +64,7 @@ const getRandomArrayItem = (array) => {
 };
 
 const getUniqueList = (list) => {
-  let uniqueOffersList = list.filter((item, pos) => {
+  const uniqueOffersList = list.filter((item, pos) => {
     return list.indexOf(item) === pos;
   });
 
@@ -137,10 +137,10 @@ const getRandomDatesValues = () => {
 
 // Генерирует массив точек маршрутов с повторяющейся датой отъезда (departure);
 const generatePoints = () => {
-  const datesVaulesList = getRandomDatesValues();
+  const datesValuesList = getRandomDatesValues();
 
   const tripPointsList = [];
-  for (let i = 0; i < datesVaulesList.length; i++) {
+  for (let i = 0; i < datesValuesList.length; i++) {
     const point = {
       id: String(new Date() + Math.random()),
       type: getRandomArrayItem(TRIP_TYPES.concat(STOP_TYPES)),
@@ -148,8 +148,8 @@ const generatePoints = () => {
       offers: generateOffers(generateOfferKeys()),
       destinationInfo: generateDestinationInfo(),
       price: getRandomIntegerNumber(MIN_PRICE, MAX_PRICE),
-      departure: new Date(datesVaulesList[i]),
-      arrival: new Date(datesVaulesList[i] + getRandom(DAY_MILLISECONDS_COUNT * 3)),
+      departure: new Date(datesValuesList[i]),
+      arrival: new Date(datesValuesList[i] + getRandom(DAY_MILLISECONDS_COUNT * 3)),
       favorite: false,
     };
     tripPointsList.push(point);

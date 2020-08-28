@@ -6,6 +6,7 @@ import {render} from '../utils/render.js';
 import PointController, {Mode as PointControllerMode, EmptyPoint} from '../presenter/trip-point.js';
 import NoPointsComponent from '../view/no-points.js';
 import {INPUT_YEAR_MONTH_DAY_FORMAT} from '../utils/common.js';
+import {renderTripCost} from '../main.js';
 import moment from "moment";
 
 const getDays = (points) => {
@@ -73,6 +74,7 @@ export default class TripController {
 
     this._getSortedTrips(SortTypes.SORT_EVENT);
     button.setAttribute(`disabled`, `true`);
+
     const container = this._tripDaysComponent.getElement();
     this._creatingPoint = new PointController(container, this._onDataChange, this._onViewChange, button);
     this._creatingPoint.render(EmptyPoint, PointControllerMode.ADDING);
@@ -180,10 +182,19 @@ export default class TripController {
   _updatePoints() {
     this._removePoints();
     this._renderPoints(this._pointsModel.getPoints());
+    renderTripCost(this._pointsModel.getPoints());
   }
 
   _onFilterChange() {
     this._updatePoints();
+  }
+
+  hide() {
+    this._container.classList.add(`visually-hidden`);
+  }
+
+  show() {
+    this._container.classList.remove(`visually-hidden`);
   }
 
 }

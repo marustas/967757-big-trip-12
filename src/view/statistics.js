@@ -313,7 +313,7 @@ const createStatisticsTemplate = () => {
 };
 
 export default class StatisticsComponent extends AbstractSmartComponent {
-  constructor({points}) {
+  constructor(points) {
     super();
 
     this._points = points;

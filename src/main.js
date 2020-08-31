@@ -1,4 +1,3 @@
-
 import API from './api.js';
 import TripCostComponent from './view/trip-cost.js';
 import MenuComponent, {MenuItem} from './view/menu.js';

@@ -1,4 +1,4 @@
-import AbstractComponent from "./abstract.js";
+import Abstract from "./abstract.js";
 import {correctDateFormat, correctMonthAndYearFormat, correctDayFormat} from '../utils/common.js';
 
 const createTripDayTemplate = (tripDayInfo) => {
@@ -14,7 +14,7 @@ const createTripDayTemplate = (tripDayInfo) => {
   );
 };
 
-export default class TripDay extends AbstractComponent {
+export default class TripDay extends Abstract {
   constructor(tripDayInfo) {
     super();
 

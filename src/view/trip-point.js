@@ -79,7 +79,7 @@ export default class Event extends AbstractComponent {
     this._pointRollupClickHandler = handler;
   }
 
-  recoveryListeners() {
+  restoreHandlers() {
     this.setPointRollupClickHandler(this._pointRollupClickHandler);
   }
 

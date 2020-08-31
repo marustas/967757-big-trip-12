@@ -1,6 +1,6 @@
-import AbstractComponent from "./abstract.js";
+import Abstract from "./abstract.js";
 
-export default class AbstractSmartComponent extends AbstractComponent {
+export default class AbstractSmartComponent extends Abstract {
   recoveryListeners() {
     throw new Error(`Abstract method not implemented: recoveryListeners`);
   }

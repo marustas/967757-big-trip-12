@@ -75,7 +75,7 @@ menuComponent.setOnChange((menuItem) => {
       break;
     case MenuItem.STATISTICS:
       menuComponent.setActiveItem(MenuItem.STATISTICS);
-      filterController.setDefaultView(); // скидываю фильтр к дефолту controllers/filer.js
+      filterController.setDefaultView();
       tripController.hide();
       statisticsComponent.show();
       break;

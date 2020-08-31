@@ -1,4 +1,4 @@
-import AbstractComponent from "./abstract.js";
+import Abstract from "./abstract.js";
 
 const createTripCostTemplate = (cost) => {
 
@@ -11,7 +11,7 @@ const createTripCostTemplate = (cost) => {
   );
 };
 
-export default class tripCost extends AbstractComponent {
+export default class tripCost extends Abstract {
   constructor(cost) {
     super();
 

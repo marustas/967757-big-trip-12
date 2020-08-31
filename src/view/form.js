@@ -138,7 +138,7 @@ const createFormTemplate = (currentPoint, mode) => {
     return ``;
   };
 
-  const getDeleteOrCandel = () => {
+  const getDeleteOrCancel = () => {
     if (mode !== PointControllerMode.ADDING) {
       return (
         `<button class="event__reset-btn" type="reset">Delete</button>`
@@ -209,7 +209,7 @@ const createFormTemplate = (currentPoint, mode) => {
             <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${price}"  pattern="^[0-9]+$" title="Разрешено указывать только числовые значения">
           </div>
           <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-          ${getDeleteOrCandel()}
+          ${getDeleteOrCancel()}
           ${getFavorite()}
           ${getRollUpMarkUp()}
         </header>
@@ -345,7 +345,7 @@ export default class Form extends AbstractSmartComponent {
     this._favoriteButtonClickHandler = handler;
   }
 
-  setTripTypeClickHandner(handler) {
+  setTripTypeClickHandler(handler) {
     this.getElement().querySelectorAll(`.event__type-input`).forEach((item) => {
       item.addEventListener(`change`, handler);
     });
@@ -353,7 +353,7 @@ export default class Form extends AbstractSmartComponent {
     this._tripTypeClickHandner = handler;
   }
 
-  setDestinationClickHandner(handler) {
+  setDestinationClickHandler(handler) {
     this.getElement().querySelector(`.event__input--destination`)
       .addEventListener(`change`, handler);
 
@@ -392,8 +392,8 @@ export default class Form extends AbstractSmartComponent {
   recoveryListeners() {
     this.setSaveFormClickHandler(this._saveFormClickHandler);
     this.setFavoriteButtonClickHandler(this._favoriteButtonClickHandler);
-    this.setTripTypeClickHandner(this._tripTypeClickHandner);
-    this.setDestinationClickHandner(this._destinationClickHandner);
+    this.setTripTypeClickHandler(this._tripTypeClickHandner);
+    this.setDestinationClickHandler(this._destinationClickHandner);
 
     this.setStartTimeClickHandler(this._startTimeClickHandler);
     this.setEndTimeClickHandler(this._endTimeClickHandler);
@@ -452,7 +452,7 @@ export default class Form extends AbstractSmartComponent {
     if (element.querySelector(`#event-favorite-1`)) {
       element.querySelector(`#event-favorite-1`)
         .addEventListener(`click`, (evt) => {
-          this._currentPoint.favorite = evt.target.checked;
+          this._currentPoint.favorite = evt.target;
 
           this.rerender();
         });
@@ -461,11 +461,11 @@ export default class Form extends AbstractSmartComponent {
     // Хендлер клика по типам точек маршрута;
     element.querySelectorAll(`.event__type-input`).forEach((item) => {
       item.addEventListener(`change`, (evt) => {
-        this._currentPoint.type = changeFirstLetter(evt.target.value);
+        this._currentPoint.type = changeFirstLetter(evt.target);
 
         const currentOffers = OffersModel.getOffers().find(
             (currentValue) => {
-              return currentValue.type === evt.target.value;
+              return currentValue.type === evt.target;
             }
         );
 
@@ -494,12 +494,12 @@ export default class Form extends AbstractSmartComponent {
 
       const currentPhotos = DestinationsModel.getDestinations().find(
           (currentValue) => {
-            return currentValue.name === evt.target.value;
+            return currentValue.name === evt.target;
           }
       );
 
       evt.preventDefault();
-      const index = destinationsNames.findIndex((destination) => destination === evt.target.value);
+      const index = destinationsNames.findIndex((destination) => destination === evt.target);
 
       if (index === -1) {
         destinationInput.setCustomValidity(`Выберете пункт назначения из списка`);
@@ -514,12 +514,12 @@ export default class Form extends AbstractSmartComponent {
 
     // Хендлер для клика по времени начала путешествия;
     element.querySelector(`input[name="event-start-time"]`).addEventListener(`change`, (evt) => {
-      this._currentPoint.departure = evt.target.value;
+      this._currentPoint.departure = evt.target;
     });
 
     // Хендлер для клика по времени окончания путешествия;
     element.querySelector(`input[name="event-end-time"]`).addEventListener(`change`, (evt) => {
-      this._currentPoint.arrival = evt.target.value;
+      this._currentPoint.arrival = evt.target;
     });
 
     // Хендлер для клика по кнопке rollUp в форме;
@@ -532,7 +532,7 @@ export default class Form extends AbstractSmartComponent {
     // Хендлер для клика по предложению;
     this.getElement().querySelectorAll(`.event__offer-checkbox`).forEach((item) => {
       item.addEventListener(`change`, (evt) => {
-        let label = document.querySelector(`[for="${evt.target.id}"]`);
+        let label = document.querySelector(`[for="${evt.target}"]`);
 
         const labelTitle = label.querySelector(`.event__offer-title`).textContent;
 
@@ -552,7 +552,7 @@ export default class Form extends AbstractSmartComponent {
     this.getElement().querySelector(`.event__input--price`)
       .addEventListener(`change`, (evt) => {
 
-        this._currentPoint.price = evt.target.value;
+        this._currentPoint.price = evt.target;
       });
   }
 

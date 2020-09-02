@@ -1,5 +1,5 @@
-import FormComponent from '../view/form.js';
-import EventComponent from '../view/trip-point.js';
+import Form from '../view/form.js';
+import Event from '../view/trip-point.js';
 import FormContainerComponent from '../view/form-container.js';
 import {render, RenderPosition, replace, remove} from '../utils/render.js';
 import PointModel from "../model/point.js";
@@ -53,8 +53,8 @@ export default class PointController {
     const oldPointComponent = this._pointComponent;
     const oldFormComponent = this._formComponent;
 
-    this._pointComponent = new EventComponent(this._point);
-    this._formComponent = new FormComponent(this._point, this._mode);
+    this._pointComponent = new Event(this._point);
+    this._formComponent = new Form(this._point, this._mode);
     this._formContainerComponent = new FormContainerComponent();
 
     // Отрисовка точки маршрута;

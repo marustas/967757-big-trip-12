@@ -1,4 +1,4 @@
-import AbstractComponent from "./abstract.js";
+import Abstract from "./abstract.js";
 
 const createFormContainerTemplate = () => {
   return (
@@ -6,7 +6,7 @@ const createFormContainerTemplate = () => {
   );
 };
 
-export default class FormContainer extends AbstractComponent {
+export default class FormContainer extends Abstract {
 
   getTemplate() {
     return createFormContainerTemplate();

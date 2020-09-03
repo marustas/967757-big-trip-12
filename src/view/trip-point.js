@@ -1,10 +1,9 @@
 import {correctDateISOFormat, correctTimeFormat, calculateTripTime} from '../utils/common.js';
-import AbstractComponent from "./abstract.js";
+import Abstract from "./abstract.js";
 
 const createTripPointMarkup = (point) => {
-  const {type, destination, departure, arrival, price} = point;
-  // const {type, destination, offers, departure, arrival, price} = point;
-
+  const {type, destinationInfo, departure, arrival, price} = point;
+  const {name} = destinationInfo;
   const tripTime = calculateTripTime(departure, arrival);
 
   const pointImage = point.type.toLowerCase();
@@ -28,7 +27,7 @@ const createTripPointMarkup = (point) => {
       <div class="event__type">
         <img class="event__type-icon" width="42" height="42" src="img/icons/${pointImage}.png" alt="Event type icon">
       </div>
-      <h3 class="event__title">${type} to ${destination}</h3>
+      <h3 class="event__title">${type} to ${name}</h3>
       <div class="event__schedule">
         <p class="event__time">
           <time class="event__start-time" datetime="${correctDateISOFormat(departure)}">${correctTimeFormat(departure)}</time>
@@ -59,7 +58,7 @@ const createTripPointTemplate = (point) => {
   );
 };
 
-export default class Event extends AbstractComponent {
+export default class Event extends Abstract {
   constructor(point) {
     super();
 
@@ -79,7 +78,7 @@ export default class Event extends AbstractComponent {
     this._pointRollupClickHandler = handler;
   }
 
-  recoveryListeners() {
+  restoreHandlers() {
     this.setPointRollupClickHandler(this._pointRollupClickHandler);
   }
 

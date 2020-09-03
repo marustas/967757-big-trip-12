@@ -1,4 +1,4 @@
-import AbstractComponent from "./abstract.js";
+import Abstract from "./abstract.js";
 
 const FILTER_ID_PREFIX = `filter-`;
 
@@ -26,7 +26,7 @@ const createFiltersTemplate = () => {
   );
 };
 
-export default class Filters extends AbstractComponent {
+export default class Filters extends Abstract {
   constructor(filters) {
     super();
 

@@ -1,4 +1,4 @@
-import AbstractComponent from "./abstract.js";
+import Abstract from "./abstract.js";
 
 export const SortTypes = {
   SORT_EVENT: `sort-event`,
@@ -37,7 +37,7 @@ const createSortTemplate = () => {
   );
 };
 
-export default class Sort extends AbstractComponent {
+export default class Sort extends Abstract {
   constructor() {
     super();
 

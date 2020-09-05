@@ -1,14 +1,16 @@
 import API from './api.js';
-import TripCostComponent from './view/trip-cost.js';
 import MenuComponent, {MenuItem} from './view/menu.js';
 import {getPrice} from './utils/common.js';
-import {RenderPosition, render} from './utils/render.js';
+import {RenderPosition, render, remove} from './utils/render.js';
 import TripController from './presenter/trip-days.js';
 import PointsModel from './model/points.js';
 import DestinationsModel from './model/destination.js';
 import OffersModel from './model/offer.js';
 import FilterController from './presenter/filter.js';
 import StatisticsComponent from './view/statistics.js';
+
+import TripCost from './view/trip-cost.js';
+import {tripInfoContainer, renderTripInfo} from './utils/trip-info.js';
 
 // Получаю данные с сервера;
 const AUTORISATION = `Basic dsfsfe3redgdg`;
@@ -35,14 +37,14 @@ renderTripMenuOptions();
 // Отрисовка общей цены поездок в шапке (для всех точек маршрута);
 export const renderTripCost = (model) => {
   const tripCost = getPrice(model);
-  const tripCostComponent = new TripCostComponent(tripCost);
-  const tripInfo = tripMenuElement.querySelector(`.trip-main__trip-info`);
+  const tripCostComponent = new TripCost(tripCost);
 
-  if (tripInfo) {
-    tripInfo.remove();
+  if (tripCostComponent) {
+    remove(tripCostComponent);
   }
 
-  render(tripMenuElement, tripCostComponent, RenderPosition.AFTERBEGIN);
+  render(tripInfoContainer.getElement(), tripCostComponent);
+  render(tripMenuElement, tripInfoContainer, RenderPosition.AFTERBEGIN);
 };
 
 // Отрисовка отфильтрованных точек маршрута;
@@ -60,12 +62,10 @@ const newPointClickHandler = (evt) => {
 
 newPointButton.addEventListener(`click`, newPointClickHandler);
 
-// Генерирую статистику и скрываю ее;
 const statisticsComponent = new StatisticsComponent(pointsModel);
 render(tripEventsElement, statisticsComponent, RenderPosition.AFTEREND);
 statisticsComponent.hide();
 
-// Отлавливаю клик по Списку точек маршрута и Статистике (в menu.js);
 menuComponent.setOnChange((menuItem) => {
   switch (menuItem) {
     case MenuItem.TABLE:
@@ -84,6 +84,10 @@ menuComponent.setOnChange((menuItem) => {
 
 api.getPoints()
   .then((points) => {
+    renderTripInfo(points);
+    tripController.renderSortMenu();
+    tripController.renderPreloader();
+
     pointsModel.setPoints(points);
     for (const point of points) {
       if (point.offers.length > 0) {

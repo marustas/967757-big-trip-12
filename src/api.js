@@ -50,7 +50,7 @@ class API {
 
   updatePoint(id, data) {
     return this._load({
-      url: `/points/:pointId`,
+      url: `/points/${id}`,
       method: Method.PUT,
       body: JSON.stringify(data.toRAW()),
       headers: new Headers({"Content-Type": `application/json`})
@@ -59,8 +59,8 @@ class API {
       .then(Point.parsePoint);
   }
 
-  deletePoint() {
-    return this._load({url: `/points/:pointId`, method: Method.DELETE});
+  deletePoint(id) {
+    return this._load({url: `/points/${id}`, method: Method.DELETE});
   }
 
   _load({url, method = Method.GET, body = null, headers = new Headers()}) {

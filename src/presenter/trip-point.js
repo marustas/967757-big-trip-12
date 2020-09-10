@@ -5,6 +5,7 @@ import {render, RenderPosition, replace, remove} from '../utils/render.js';
 import PointModel from "../model/point.js";
 
 const ESC_KEYCODE = 27;
+const SHAKE_ANIMATION_TIMEOUT = 600;
 
 export const Mode = {
   DEFAULT: `default`,
@@ -29,9 +30,9 @@ export const EmptyPoint = {
 
 export default class PointController {
   constructor(container, onDataChange, onViewChange, button) {
-    this._container = container; // container — элемент, в который контроллер отрисовывает точку маршрута или открытую форму
-    this._onDataChange = onDataChange; // Реализует сохранение данных формы (передает данные в модель);
-    this._onViewChange = onViewChange; // Понадобятся чуть позже, после реализации удаления / добавления карточки точки маршрута
+    this._container = container;
+    this._onDataChange = onDataChange;
+    this._onViewChange = onViewChange;
     this._mode = Mode.DEFAULT;
     this._point = null;
 
@@ -67,7 +68,7 @@ export default class PointController {
     // Удаление формы редактиования точки маршрута по нажатию на ESC;
     this._onEscKeyDown = (evt) => {
       if (evt.keyCode === ESC_KEYCODE && this._mode === Mode.EDIT) {
-        this._replaceEditToPoint();
+        this.replaceEditToPoint();
         document.removeEventListener(`keydown`, this._onEscKeyDown);
       }
 
@@ -82,10 +83,9 @@ export default class PointController {
 
     // Удаление формы редактирования точки маршрута;
     const deleteButtonClickHandler = () => {
-      if (this._newPointButton) {
-        this._newPointButton.removeAttribute(`disabled`);
-      }
 
+      this.renameDeleteButton();
+      this.disableFormElements();
       this._onDataChange(this, this._point, null);
     };
 
@@ -109,18 +109,21 @@ export default class PointController {
     // Сохранение формы редактирования точки маршрута;
     const saveFormClickHandler = (evt) => {
       evt.preventDefault();
-      this._replaceEditToPoint();
+
       const data = this._formComponent.getData(this._point);
       const newData = PointModel.clone(data);
-      // console.log(`point`, newData);
       this._onDataChange(this, this._point, newData);
+
+      this.renameSaveButton();
+      this.disableFormElements();
 
       document.removeEventListener(`keydown`, this._onEscKeyDown);
     };
 
     // Замена формы на карточку пункта маршрута;
     const formRollupClickHandler = () => {
-      this._replaceEditToPoint();
+      this.replaceEditToPoint();
+
       this._pointComponent.setPointRollupClickHandler(pointRollUpClickHandler);
       document.removeEventListener(`keydown`, this._onEscKeyDown);
     };
@@ -141,10 +144,12 @@ export default class PointController {
     const newFormClickHandler = (evt) => {
       evt.preventDefault();
 
-      this._replaceEditToNewPoint();
       const data = this._formComponent.getData(this._point);
       const newData = PointModel.clone(data);
       this._onDataChange(this, EmptyPoint, newData);
+
+      this.renameSaveButton();
+      this.disableFormElements();
       this._newPointButton.removeAttribute(`disabled`);
 
       document.removeEventListener(`keydown`, this._onEscKeyDown);
@@ -160,22 +165,19 @@ export default class PointController {
 
   setDefaultView() {
     if (this._mode !== Mode.DEFAULT) {
-      this._replaceEditToPoint();
+      this.replaceEditToPoint();
     }
   }
 
   _replacePointToEdit() {
     this._onViewChange();
-    // Форма, которая выводится в точке маршрута, должна выводиться в теге <li></li>,
-    // Поэтому вначане заменяю точку машрута на контейнер <li></li>, а уже в него
-    // добавляю форму;
     replace(this._formContainerComponent, this._pointComponent);
     render(this._formContainerComponent.getElement(), this._formComponent);
 
     this._mode = Mode.EDIT;
   }
 
-  _replaceEditToPoint() {
+  replaceEditToPoint() {
     this._formComponent.reset();
     if (document.contains(this._formComponent.getElement())) {
       replace(this._pointComponent, this._formContainerComponent);
@@ -184,7 +186,7 @@ export default class PointController {
     this._mode = Mode.DEFAULT;
   }
 
-  _replaceEditToNewPoint() {
+  replaceEditToNewPoint() {
     this._formComponent.reset();
     if (document.contains(this._formComponent.getElement())) {
       remove(this._formComponent);
@@ -193,9 +195,65 @@ export default class PointController {
     this._mode = Mode.DEFAULT;
   }
 
+  disableFormElements(status = true) {
+    this._formComponent.getElement().querySelector(`.event__save-btn`).disabled = status;
+    this._formComponent.getElement().querySelector(`.event__reset-btn`).disabled = status;
+    this._formComponent.getElement().querySelector(`.event__type-toggle`).disabled = status;
+
+    const favoriteButton = this._formComponent.getElement().querySelector(`#event-favorite-1`);
+    const rollUpButton = this._formComponent.getElement().querySelector(`.event__rollup-btn`);
+    if (favoriteButton && rollUpButton) {
+      favoriteButton.disabled = status;
+      rollUpButton.disabled = status;
+    }
+
+    const inputElements = this._formComponent.getElement().querySelectorAll(`.event__input`);
+    for (const inputElement of inputElements) {
+      inputElement.disabled = status;
+    }
+
+    const offerElements = this._formComponent.getElement().querySelectorAll(`.event__offer-selector .event__offer-checkbox`);
+    if (offerElements.length > 0) {
+      for (const offerElement of offerElements) {
+        offerElement.disabled = status;
+      }
+    }
+  }
+
+  renameSaveButton(status = true) {
+    const saveButton = this._formComponent.getElement().querySelector(`.event__save-btn`);
+    if (status) {
+      saveButton.textContent = `Saving...`;
+    } else {
+      saveButton.textContent = `Save`;
+    }
+  }
+
+  renameDeleteButton(status = true) {
+    const deleteButton = this._formComponent.getElement().querySelector(`.event__reset-btn`);
+    if (status) {
+      deleteButton.textContent = `Deleting...`;
+    } else {
+      deleteButton.textContent = `Delete`;
+    }
+  }
+
   destroy() {
     remove(this._formComponent);
     remove(this._pointComponent);
     document.removeEventListener(`keydown`, this._onEscKeyDown);
   }
+
+  shake() {
+    this._formComponent.getElement().classList.add(`red-wrapper`);
+    this._formComponent.getElement().style.animation = `shake ${SHAKE_ANIMATION_TIMEOUT / 1000}s`;
+
+    setTimeout(() => {
+      this._formComponent.getElement().style.animation = ``;
+
+      this.disableFormElements(false);
+      this.renameSaveButton(false);
+    }, SHAKE_ANIMATION_TIMEOUT);
+  }
+
 }

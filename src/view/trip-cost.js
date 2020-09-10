@@ -3,15 +3,13 @@ import Abstract from "./abstract.js";
 const createTripCostTemplate = (cost) => {
 
   return (
-    `<section class="trip-main__trip-info  trip-info">
-      <p class="trip-info__cost">
-        Total: &euro;&nbsp;<span class="trip-info__cost-value">${cost}</span>
-      </p>
-    </section>`
+    `<p class="trip-info__cost">
+      Total: &euro;&nbsp;<span class="trip-info__cost-value">${cost}</span>
+    </p>`
   );
 };
 
-export default class tripCost extends Abstract {
+export default class TripCost extends Abstract {
   constructor(cost) {
     super();
 

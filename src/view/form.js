@@ -493,7 +493,7 @@ export default class Form extends AbstractSmartComponent {
 
       const currentPhotos = DestinationsModel.getDestinations().find(
           (currentValue) => {
-            return currentValue.name === evt.target;
+            return currentValue.name === evt.target.value;
           }
       );
 

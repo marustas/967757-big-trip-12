@@ -39,8 +39,8 @@ export const renderTripCost = (model) => {
   const tripCost = getPrice(model);
   const tripCostComponent = new TripCost(tripCost);
 
-  if (tripCostComponent) {
-    remove(tripCostComponent);
+  if (tripInfoContainer) {
+    remove(tripInfoContainer);
   }
 
   render(tripInfoContainer.getElement(), tripCostComponent);

@@ -12,12 +12,10 @@ import StatisticsComponent from './view/statistics.js';
 import TripCost from './view/trip-cost.js';
 import {tripInfoContainer, renderTripInfo} from './utils/trip-info.js';
 
-// Получаю данные с сервера;
 const AUTORISATION = `Basic dsfsfe3redgdg`;
 const END_POINT = `https://12.ecmascript.pages.academy/big-trip`;
 const api = new API(END_POINT, AUTORISATION);
 
-// Общие переменные;
 const headerElement = document.querySelector(`.page-header`);
 const tripMenuElement = headerElement.querySelector(`.trip-main`);
 const newPointButton = headerElement.querySelector(`.trip-main__event-add-btn`);
@@ -25,7 +23,6 @@ const mainElement = document.querySelector(`.page-body__page-main`);
 const tripEventsElement = mainElement.querySelector(`.trip-events`);
 const pointsModel = new PointsModel();
 
-// Отрисовка пунктов меню: Table, Status;
 const menuComponent = new MenuComponent();
 const renderTripMenuOptions = () => {
   const tripSwitchElement = tripMenuElement.querySelector(`.trip-main__trip-controls h2:first-child`);
@@ -34,24 +31,21 @@ const renderTripMenuOptions = () => {
 
 renderTripMenuOptions();
 
-// Отрисовка общей цены поездок в шапке (для всех точек маршрута);
 export const renderTripCost = (model) => {
   const tripCost = getPrice(model);
   const tripCostComponent = new TripCost(tripCost);
 
-  if (tripCostComponent) {
-    remove(tripCostComponent);
+  if (tripInfoContainer) {
+    remove(tripInfoContainer);
   }
 
   render(tripInfoContainer.getElement(), tripCostComponent);
   render(tripMenuElement, tripInfoContainer, RenderPosition.AFTERBEGIN);
 };
 
-// Отрисовка отфильтрованных точек маршрута;
 const filterController = new FilterController(mainElement, pointsModel);
 filterController.render();
 
-// Отрисовка информации о днях путешествия;
 const tripController = new TripController(tripEventsElement, pointsModel, api);
 
 const newPointClickHandler = (evt) => {

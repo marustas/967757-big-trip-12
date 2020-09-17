@@ -63,7 +63,7 @@ export default class Points {
     this._callHandlers(this._dataChangeHandlers);
   }
 
-  // Удаление уже имеющейся точки маршрута;
+  // Удаление уже имеющейся;
   removePoint(id) {
     const index = this._points.findIndex((it) => it.id === id);
 

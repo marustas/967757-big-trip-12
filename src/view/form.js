@@ -445,7 +445,7 @@ export default class Form extends AbstractSmartComponent {
     if (element.querySelector(`#event-favorite-1`)) {
       element.querySelector(`#event-favorite-1`)
         .addEventListener(`click`, (evt) => {
-          this._currentPoint.favorite = evt.target;
+          this._currentPoint.favorite = evt.target.checked;
 
           this.rerender();
         });
@@ -453,7 +453,7 @@ export default class Form extends AbstractSmartComponent {
 
     element.querySelectorAll(`.event__type-input`).forEach((item) => {
       item.addEventListener(`change`, (evt) => {
-        this._currentPoint.type = changeFirstLetter(evt.target);
+        this._currentPoint.type = changeFirstLetter(evt.target.value);
 
         const currentOffers = OffersModel.getOffers().find(
             (currentValue) => {
@@ -489,7 +489,7 @@ export default class Form extends AbstractSmartComponent {
       );
 
       evt.preventDefault();
-      const index = destinationsNames.findIndex((destination) => destination === evt.target);
+      const index = destinationsNames.findIndex((destination) => destination === evt.target.value);
 
       if (index === -1) {
         destinationInput.setCustomValidity(`Выберете пункт назначения из списка`);
@@ -503,11 +503,11 @@ export default class Form extends AbstractSmartComponent {
     });
 
     element.querySelector(`input[name="event-start-time"]`).addEventListener(`change`, (evt) => {
-      this._currentPoint.departure = evt.target;
+      this._currentPoint.departure = evt.target.value;
     });
 
     element.querySelector(`input[name="event-end-time"]`).addEventListener(`change`, (evt) => {
-      this._currentPoint.arrival = evt.target;
+      this._currentPoint.arrival = evt.target.value;
     });
 
     if (this.getElement().querySelector(`.event__rollup-btn`)) {
@@ -516,9 +516,10 @@ export default class Form extends AbstractSmartComponent {
       });
     }
 
+    // Хендлер для клика по предложению;
     this.getElement().querySelectorAll(`.event__offer-checkbox`).forEach((item) => {
       item.addEventListener(`change`, (evt) => {
-        let label = document.querySelector(`[for="${evt.target}"]`);
+        let label = document.querySelector(`[for="${evt.target.id}"]`);
 
         const labelTitle = label.querySelector(`.event__offer-title`).textContent;
 
@@ -538,7 +539,7 @@ export default class Form extends AbstractSmartComponent {
     this.getElement().querySelector(`.event__input--price`)
       .addEventListener(`change`, (evt) => {
 
-        this._currentPoint.price = evt.target;
+        this._currentPoint.price = evt.target.value;
       });
   }
 

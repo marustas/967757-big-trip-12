@@ -19,7 +19,6 @@ const createFormTemplate = (currentPoint, mode) => {
   const destination = encode(destinationInfo.name);
   const price = encode(notSanitizedPrice.toString());
 
-  // Выводит в форму список предложений
   const createTripTypesMarkup = (tripTypes) => {
     return tripTypes.map((pointTitle) => {
       const pointType = pointTitle.toLowerCase();
@@ -32,7 +31,6 @@ const createFormTemplate = (currentPoint, mode) => {
     }).join(`\n`);
   };
 
-  // Выводит в форму список точек маршурта
   const createDestinationsMarkup = () => {
     const destinations = DestinationsModel.getDestinations();
     if (destinations && destinations.length > 0) {
@@ -46,7 +44,6 @@ const createFormTemplate = (currentPoint, mode) => {
     return ``;
   };
 
-  // Передает в оффер параметр checked
   const getCheckOffer = (offer) => {
     if (!offer.isChecked) {
       return ``;
@@ -122,7 +119,6 @@ const createFormTemplate = (currentPoint, mode) => {
     return ``;
   };
 
-  // Проверяет режим добавления точки маршрута: либо выводит звездочку либо нет;
   const getFavorite = () => {
     if (mode !== PointControllerMode.ADDING) {
       return (
@@ -228,7 +224,6 @@ const createFormTemplate = (currentPoint, mode) => {
   );
 };
 
-// Поддерживаю сохранение данных формы;
 const parseFormData = (formData, form, point) => {
 
   const type = form.querySelector(`.event__label`).textContent.trim().split(` `);
@@ -447,7 +442,6 @@ export default class Form extends AbstractSmartComponent {
   _subscribeOnEvents() {
     const element = this.getElement();
 
-    // Хендлер клика по звездочке;
     if (element.querySelector(`#event-favorite-1`)) {
       element.querySelector(`#event-favorite-1`)
         .addEventListener(`click`, (evt) => {
@@ -457,7 +451,6 @@ export default class Form extends AbstractSmartComponent {
         });
     }
 
-    // Хендлер клика по типам точек маршрута;
     element.querySelectorAll(`.event__type-input`).forEach((item) => {
       item.addEventListener(`change`, (evt) => {
         this._currentPoint.type = changeFirstLetter(evt.target);
@@ -473,13 +466,11 @@ export default class Form extends AbstractSmartComponent {
       });
     });
 
-    // Хендлер клика по пунктам назначения (очистка значения в поле по фокусу);
     element.querySelector(`.event__input--destination`).addEventListener(`focus`, () => {
       const destinationInput = element.querySelector(`.event__input--destination`);
       destinationInput.value = null;
     });
 
-    // Хендлер клика по пунктам назначения (замена значения в поле и перезапись значения в объекте выбранной точки маршрута);
     element.querySelector(`.event__input--destination`).addEventListener(`change`, (evt) => {
       const destinationInput = element.querySelector(`.event__input--destination`);
 
@@ -511,24 +502,20 @@ export default class Form extends AbstractSmartComponent {
       this.rerender();
     });
 
-    // Хендлер для клика по времени начала путешествия;
     element.querySelector(`input[name="event-start-time"]`).addEventListener(`change`, (evt) => {
       this._currentPoint.departure = evt.target;
     });
 
-    // Хендлер для клика по времени окончания путешествия;
     element.querySelector(`input[name="event-end-time"]`).addEventListener(`change`, (evt) => {
       this._currentPoint.arrival = evt.target;
     });
 
-    // Хендлер для клика по кнопке rollUp в форме;
     if (this.getElement().querySelector(`.event__rollup-btn`)) {
       element.querySelector(`.event__rollup-btn`).addEventListener(`click`, () => {
         this.rerender();
       });
     }
 
-    // Хендлер для клика по предложению;
     this.getElement().querySelectorAll(`.event__offer-checkbox`).forEach((item) => {
       item.addEventListener(`change`, (evt) => {
         let label = document.querySelector(`[for="${evt.target}"]`);

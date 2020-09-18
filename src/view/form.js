@@ -457,7 +457,7 @@ export default class Form extends AbstractSmartComponent {
 
         const currentOffers = OffersModel.getOffers().find(
             (currentValue) => {
-              return currentValue.type === evt.target;
+              return currentValue.type === evt.target.value;
             }
         );
 

@@ -519,7 +519,7 @@ export default class Form extends AbstractSmartComponent {
     // Хендлер для клика по предложению;
     this.getElement().querySelectorAll(`.event__offer-checkbox`).forEach((item) => {
       item.addEventListener(`change`, (evt) => {
-        let label = document.querySelector(`[for="${evt.target.id}"]`);
+        const label = document.querySelector(`[for="${evt.target.id}"]`);
 
         const labelTitle = label.querySelector(`.event__offer-title`).textContent;
 

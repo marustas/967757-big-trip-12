@@ -9,6 +9,9 @@ const createTripPointMarkup = (point) => {
   const pointImage = point.type.toLowerCase();
 
   const checkedOffers = point.offers.filter((offer) => offer.isChecked === true);
+  if (checkedOffers.length > 3) {
+    checkedOffers.length = 3;
+  }
 
   const createOffersMarkup = () => {
     return checkedOffers.map((offer) => {

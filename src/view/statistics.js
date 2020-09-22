@@ -53,7 +53,7 @@ const chartCallback = (animation) => {
   if (axisY.getPixelForTick(ticks.length - 1)) {
     ticks.forEach((tick, idx) => {
 
-      const onLoadImage = (evt) => {
+      const loadImageHandler = (evt) => {
         const textParams = chart.ctx.font;
         chart.ctx.font = `normal ${fontSize}px sans-serif`;
         const tickWidth = chart.ctx.measureText(tick).width;
@@ -63,11 +63,11 @@ const chartCallback = (animation) => {
         const tickX = axisY.right - tickWidth - (ICON_SIZE * 2);
 
         chart.ctx.drawImage(evt.target, tickX, tickY, ICON_SIZE, ICON_SIZE);
-        evt.target.removeEventListener(`load`, onLoadImage);
+        evt.target.removeEventListener(`load`, loadImageHandler);
       };
 
       const tickIcon = new Image();
-      tickIcon.addEventListener(`load`, onLoadImage);
+      tickIcon.addEventListener(`load`, loadImageHandler);
       tickIcon.src = `img/icons/${tick.toLowerCase()}.png`;
     });
   }

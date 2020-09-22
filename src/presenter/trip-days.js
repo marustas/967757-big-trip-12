@@ -38,11 +38,11 @@ export default class TripDays {
     this._showedPointsControllers = [];
     this._noPointsComponent = null;
 
-    this._onDataChange = this._onDataChange.bind(this);
-    this._onViewChange = this._onViewChange.bind(this);
-    this._onFilterChange = this._onFilterChange.bind(this);
+    this._dataChangeHandler = this._dataChangeHandler.bind(this);
+    this._viewChangeHandler = this._viewChangeHandler.bind(this);
+    this._filterChangeHandler = this._filterChangeHandler.bind(this);
 
-    this._pointsModel.setFilterChangeHandler(this._onFilterChange);
+    this._pointsModel.setFilterChangeHandler(this._filterChangeHandler);
   }
 
   render() {
@@ -78,7 +78,7 @@ export default class TripDays {
     button.setAttribute(`disabled`, `true`);
 
     const container = this._tripDaysComponent.getElement();
-    this._creatingPoint = new PointController(container, this._onDataChange, this._onViewChange, button);
+    this._creatingPoint = new PointController(container, this._dataChangeHandler, this._viewChangeHandler, button);
     this._creatingPoint.render(EmptyPoint, PointControllerMode.ADDING);
   }
 
@@ -123,7 +123,7 @@ export default class TripDays {
 
         if (pointDate === day.getTime()) {
           const tripEventsListElement = this._tripDayComponent.getElement().querySelector(`.trip-events__list`);
-          const pointController = new PointController(tripEventsListElement, this._onDataChange, this._onViewChange);
+          const pointController = new PointController(tripEventsListElement, this._dataChangeHandler, this._viewChangeHandler);
           pointController.render(point, PointControllerMode.DEFAULT);
           this._showedPointsControllers = this._showedPointsControllers.concat(pointController);
         }
@@ -139,13 +139,13 @@ export default class TripDays {
     const container = this._tripDayComponent.getElement().querySelector(`.trip-events__list`);
 
     for (const point of sortPointsList) {
-      const pointController = new PointController(container, this._onDataChange, this._onViewChange);
+      const pointController = new PointController(container, this._dataChangeHandler, this._viewChangeHandler);
       pointController.render(point, PointControllerMode.DEFAULT);
       this._showedPointsControllers = this._showedPointsControllers.concat(pointController);
     }
   }
 
-  _onDataChange(pointController, oldData, newData) {
+  _dataChangeHandler(pointController, oldData, newData) {
     if (oldData === EmptyPoint) {
       this._creatingPoint = null;
       if (newData === null) {
@@ -211,7 +211,7 @@ export default class TripDays {
     }
   }
 
-  _onViewChange() {
+  _viewChangeHandler() {
     this._showedPointsControllers.forEach((it) => it.setDefaultView());
   }
 
@@ -228,7 +228,7 @@ export default class TripDays {
     renderTripInfo(this._pointsModel.getPoints());
   }
 
-  _onFilterChange() {
+  _filterChangeHandler() {
     this._updatePoints();
   }
 

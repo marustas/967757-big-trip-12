@@ -31,15 +31,15 @@ export const EmptyPoint = {
 export default class PointController {
   constructor(container, onDataChange, onViewChange, button) {
     this._container = container;
-    this._onDataChange = onDataChange;
-    this._onViewChange = onViewChange;
+    this._dataChangeHandler = onDataChange;
+    this._viewChangeHandler = onViewChange;
     this._mode = Mode.DEFAULT;
     this._point = null;
 
     this._pointComponent = null;
     this._formComponent = null;
     this._formContainerComponent = null;
-    this._onEscKeyDown = null;
+    this._escKeyDownHandler = null;
 
     this._newPointButton = button;
   }
@@ -66,10 +66,10 @@ export default class PointController {
     }
 
     // Удаление формы редактиования точки маршрута по нажатию на ESC;
-    this._onEscKeyDown = (evt) => {
+    this._escKeyDownHandler = (evt) => {
       if (evt.keyCode === ESC_KEYCODE && this._mode === Mode.EDIT) {
         this.replaceEditToPoint();
-        document.removeEventListener(`keydown`, this._onEscKeyDown);
+        document.removeEventListener(`keydown`, this._escKeyDownHandler);
       }
 
       if (evt.keyCode === ESC_KEYCODE && this._mode === Mode.ADDING) {
@@ -77,7 +77,7 @@ export default class PointController {
 
         this._formComponent.reset();
         remove(this._formComponent);
-        document.removeEventListener(`keydown`, this._onEscKeyDown);
+        document.removeEventListener(`keydown`, this._escKeyDownHandler);
       }
     };
 
@@ -86,7 +86,7 @@ export default class PointController {
 
       this.renameDeleteButton();
       this.disableFormElements();
-      this._onDataChange(this, this._point, null);
+      this._dataChangeHandler(this, this._point, null);
     };
 
     // Выход из формы создания точки маршрута;
@@ -97,7 +97,7 @@ export default class PointController {
 
       this._formComponent.reset();
       remove(this._formComponent);
-      document.removeEventListener(`keydown`, this._onEscKeyDown);
+      document.removeEventListener(`keydown`, this._escKeyDownHandler);
     };
 
     // Отлавливаю клик по "Delete" на форме редактирования точки маршрута;
@@ -112,12 +112,12 @@ export default class PointController {
 
       const data = this._formComponent.getData(this._point);
       const newData = PointModel.clone(data);
-      this._onDataChange(this, this._point, newData);
+      this._dataChangeHandler(this, this._point, newData);
 
       this.renameSaveButton();
       this.disableFormElements();
 
-      document.removeEventListener(`keydown`, this._onEscKeyDown);
+      document.removeEventListener(`keydown`, this._escKeyDownHandler);
     };
 
     // Замена формы на карточку пункта маршрута;
@@ -125,7 +125,7 @@ export default class PointController {
       this.replaceEditToPoint();
 
       this._pointComponent.setPointRollupClickHandler(pointRollUpClickHandler);
-      document.removeEventListener(`keydown`, this._onEscKeyDown);
+      document.removeEventListener(`keydown`, this._escKeyDownHandler);
     };
 
     // Открытие формы редактирования точки маршрута (замена карточки на форму);
@@ -134,7 +134,7 @@ export default class PointController {
 
       this._formComponent.setSaveFormClickHandler(saveFormClickHandler);
       this._formComponent.setFormRollupClickHandler(formRollupClickHandler);
-      document.addEventListener(`keydown`, this._onEscKeyDown);
+      document.addEventListener(`keydown`, this._escKeyDownHandler);
     };
 
     // Отлавливаю клик по кнопке-rollUp на карточке точки маршрута;
@@ -146,20 +146,20 @@ export default class PointController {
 
       const data = this._formComponent.getData(this._point);
       const newData = PointModel.clone(data);
-      this._onDataChange(this, EmptyPoint, newData);
+      this._dataChangeHandler(this, EmptyPoint, newData);
 
       this.renameSaveButton();
       this.disableFormElements();
       this._newPointButton.removeAttribute(`disabled`);
 
-      document.removeEventListener(`keydown`, this._onEscKeyDown);
+      document.removeEventListener(`keydown`, this._escKeyDownHandler);
 
     };
 
     if (mode === Mode.ADDING) {
       render(this._container, this._formComponent, RenderPosition.AFTERBEGIN);
       this._formComponent.setSaveFormClickHandler(newFormClickHandler);
-      document.addEventListener(`keydown`, this._onEscKeyDown);
+      document.addEventListener(`keydown`, this._escKeyDownHandler);
     }
   }
 
@@ -170,7 +170,7 @@ export default class PointController {
   }
 
   _replacePointToEdit() {
-    this._onViewChange();
+    this._viewChangeHandler();
     replace(this._formContainerComponent, this._pointComponent);
     render(this._formContainerComponent.getElement(), this._formComponent);
 
@@ -241,7 +241,7 @@ export default class PointController {
   destroy() {
     remove(this._formComponent);
     remove(this._pointComponent);
-    document.removeEventListener(`keydown`, this._onEscKeyDown);
+    document.removeEventListener(`keydown`, this._escKeyDownHandler);
   }
 
   shake() {

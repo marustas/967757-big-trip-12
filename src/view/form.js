@@ -98,9 +98,8 @@ const createFormTemplate = (currentPoint, mode) => {
         `<h3 class="event__section-title  event__section-title--destination">Destination</h3>
         ${createDescriptionMarkup()}`
       );
-    } else {
-      return ``;
     }
+    return ``;
   };
 
   const createPhotosMarkup = () => {

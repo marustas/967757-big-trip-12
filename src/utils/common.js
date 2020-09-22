@@ -66,9 +66,8 @@ const calculateTripTime = (departure, arrival) => {
     return `${correctFormat(durationMinutes)}М`;
   } else if (durationDays <= 0) {
     return `${correctFormat(durationHours)}H ${correctFormat(durationMinutes)}М`;
-  } else {
-    return `${correctFormat(durationDays)}D ${correctFormat(durationHours)}H ${correctFormat(durationMinutes)}М`;
   }
+  return `${correctFormat(durationDays)}D ${correctFormat(durationHours)}H ${correctFormat(durationMinutes)}М`;
 };
 
 const getPrice = (points) => {

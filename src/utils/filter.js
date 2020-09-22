@@ -1,27 +1,27 @@
 import {FilterType} from "../presenter/filter.js";
 import moment from "moment";
 
-const oneDay = (dateA, dateB) => {
+const getOneDay = (dateA, dateB) => {
   const a = moment(dateA);
   const b = moment(dateB);
 
   return a.diff(b, `days`) === 0 && dateA.getDate() === dateB.getDate();
 };
 
-const futureDate = (currentDate, pointArrivalDate) => {
-  return pointArrivalDate > currentDate && !oneDay(currentDate, pointArrivalDate);
+const getFutureDate = (currentDate, pointArrivalDate) => {
+  return pointArrivalDate > currentDate && !getOneDay(currentDate, pointArrivalDate);
 };
 
-const pastDate = (currentDate, pointArrivalDate) => {
-  return pointArrivalDate < currentDate && !oneDay(currentDate, pointArrivalDate);
+const getPastDate = (currentDate, pointArrivalDate) => {
+  return pointArrivalDate < currentDate && !getOneDay(currentDate, pointArrivalDate);
 };
 
 const getFutureFilteredPoints = (points, date) => {
-  return points.filter((point) => futureDate(date, point.arrival));
+  return points.filter((point) => getFutureDate(date, point.arrival));
 };
 
 const getPastFilteredPoints = (points, date) => {
-  return points.filter((point) => pastDate(date, point.arrival));
+  return points.filter((point) => getPastDate(date, point.arrival));
 };
 
 export const getPointsByFilter = (points, filterType) => {

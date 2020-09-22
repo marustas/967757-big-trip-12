@@ -92,7 +92,7 @@ const createFormTemplate = (currentPoint, mode) => {
     );
   };
 
-  const destinationContainer = () => {
+  const getDestinationContainer = () => {
     if (destination) {
       return (
         `<h3 class="event__section-title  event__section-title--destination">Destination</h3>
@@ -211,7 +211,7 @@ const createFormTemplate = (currentPoint, mode) => {
         <section class="event__details">
           ${createOffersContainer()}
           <section class="event__section  event__section--destination">
-          ${destinationContainer()}
+          ${getDestinationContainer()}
             <div class="event__photos-container">
               <div class="event__photos-tape">
               ${createPhotosMarkup()}

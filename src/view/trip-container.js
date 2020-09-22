@@ -9,7 +9,7 @@ const createTripDayContainerTemplate = () => {
   );
 };
 
-export default class TripDayContainer extends Abstract {
+export default class TripContainer extends Abstract {
   getTemplate() {
     return createTripDayContainerTemplate();
   }

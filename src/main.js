@@ -2,12 +2,12 @@ import API from './api.js';
 import MenuComponent, {MenuItem} from './view/menu.js';
 import {getPrice} from './utils/common.js';
 import {RenderPosition, render, remove} from './utils/render.js';
-import TripController from './presenter/trip-days.js';
+import TripDays from './presenter/trip-days.js';
 import PointsModel from './model/points.js';
 import DestinationsModel from './model/destination.js';
 import OffersModel from './model/offer.js';
-import FilterController from './presenter/filter.js';
-import StatisticsComponent from './view/statistics.js';
+import Filter from './presenter/filter.js';
+import Statistics from './view/statistics.js';
 
 import TripCost from './view/trip-cost.js';
 import {tripInfoContainer, renderTripInfo} from './utils/trip-info.js';
@@ -43,10 +43,10 @@ export const renderTripCost = (model) => {
   render(tripMenuElement, tripInfoContainer, RenderPosition.AFTERBEGIN);
 };
 
-const filterController = new FilterController(mainElement, pointsModel);
+const filterController = new Filter(mainElement, pointsModel);
 filterController.render();
 
-const tripController = new TripController(tripEventsElement, pointsModel, api);
+const tripController = new TripDays(tripEventsElement, pointsModel, api);
 
 const newPointClickHandler = (evt) => {
   evt.preventDefault();
@@ -56,7 +56,7 @@ const newPointClickHandler = (evt) => {
 
 newPointButton.addEventListener(`click`, newPointClickHandler);
 
-const statisticsComponent = new StatisticsComponent(pointsModel);
+const statisticsComponent = new Statistics(pointsModel);
 render(tripEventsElement, statisticsComponent, RenderPosition.AFTEREND);
 statisticsComponent.hide();
 

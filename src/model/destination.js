@@ -1,5 +1,5 @@
 
-export default class Destinations {
+export default class Destination {
   constructor() {
     this._destinations = [];
   }

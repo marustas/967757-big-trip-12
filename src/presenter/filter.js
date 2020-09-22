@@ -12,7 +12,7 @@ export const FilterType = {
   PAST: `past`,
 };
 
-export default class FilterController {
+export default class Filter {
   constructor(container, pointsModel) {
     this._container = tripFilterElement;
     this._pointsModel = pointsModel;

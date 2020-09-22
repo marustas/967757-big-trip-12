@@ -61,7 +61,7 @@ const createTripPointTemplate = (point) => {
   );
 };
 
-export default class Event extends Abstract {
+export default class TripPoint extends Abstract {
   constructor(point) {
     super();
 

@@ -1,4 +1,4 @@
-import AbstractSmartComponent from "./smart";
+import Smart from "./smart";
 import Chart from "chart.js";
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import {calculateTripDuration} from "../utils/common";
@@ -312,7 +312,7 @@ const createStatisticsTemplate = () => {
   );
 };
 
-export default class StatisticsComponent extends AbstractSmartComponent {
+export default class Statistics extends Smart {
   constructor(points) {
     super();
 

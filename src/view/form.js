@@ -1,8 +1,8 @@
-import AbstractSmartComponent from "./smart.js";
+import Smart from "./smart.js";
 import {changeFirstLetter} from '../utils/common.js';
 import {Mode as PointControllerMode} from '../presenter/trip-point.js';
-import Destinations from '../model/destination.js';
-import Offers from '../model/offer.js';
+import Destination from '../model/destination.js';
+import Offer from '../model/offer.js';
 import Point from "../model/point.js";
 import {getPlaceholderMarkup, TRIP_TYPES, STOP_TYPES} from '../utils/common.js';
 
@@ -32,9 +32,9 @@ const createFormTemplate = (currentPoint, mode) => {
   };
 
   const createDestinationsMarkup = () => {
-    const destinations = Destinations.getDestinations();
+    const destinations = Destination.getDestinations();
     if (destinations && destinations.length > 0) {
-      return Destinations.getDestinations().map((destinationItem) => {
+      return Destination.getDestinations().map((destinationItem) => {
         return (
           `<option value="${destinationItem.name}"></option>`
         );
@@ -256,7 +256,7 @@ const parseFormData = (formData, form, point) => {
   });
 };
 
-export default class Form extends AbstractSmartComponent {
+export default class Form extends Smart {
   constructor(currentPoint, mode) {
     super();
 
@@ -455,7 +455,7 @@ export default class Form extends AbstractSmartComponent {
       item.addEventListener(`change`, (evt) => {
         this._currentPoint.type = changeFirstLetter(evt.target.value);
 
-        const currentOffers = Offers.getOffers().find(
+        const currentOffers = Offer.getOffers().find(
             (currentValue) => {
               return currentValue.type === evt.target.value;
             }
@@ -474,15 +474,15 @@ export default class Form extends AbstractSmartComponent {
     element.querySelector(`.event__input--destination`).addEventListener(`change`, (evt) => {
       const destinationInput = element.querySelector(`.event__input--destination`);
 
-      const destinationsNames = Destinations.getDestinations().map((destinationItem) => {
+      const destinationsNames = Destination.getDestinations().map((destinationItem) => {
         return destinationItem.name;
       });
 
-      const destinationsDescriptions = Destinations.getDestinations().map((destinationItem) => {
+      const destinationsDescriptions = Destination.getDestinations().map((destinationItem) => {
         return destinationItem.description;
       });
 
-      const currentPhotos = Destinations.getDestinations().find(
+      const currentPhotos = Destination.getDestinations().find(
           (currentValue) => {
             return currentValue.name === evt.target.value;
           }

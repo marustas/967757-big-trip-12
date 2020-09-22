@@ -1,4 +1,4 @@
-export default class Offers {
+export default class Offer {
   constructor() {
     this._offers = [];
   }

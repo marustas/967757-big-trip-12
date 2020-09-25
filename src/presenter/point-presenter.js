@@ -28,7 +28,7 @@ export const EmptyPoint = {
   arrival: `15/05/2020 14:31`,
 };
 
-export default class PointController {
+export default class PointPresenter {
   constructor(container, onDataChange, onViewChange, button) {
     this._container = container;
     this._dataChangeHandler = onDataChange;

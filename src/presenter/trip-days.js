@@ -3,7 +3,7 @@ import TripDaysComponent from '../view/trip-days.js';
 import SortComponent, {SortTypes} from '../view/sort.js';
 import TripsContainerComponent from '../view/trips-container.js';
 import {render, remove} from '../utils/render.js';
-import PointController, {Mode as PointControllerMode, EmptyPoint} from './point-controller.js';
+import PointPresenter, {Mode as PointControllerMode, EmptyPoint} from './point-presenter.js';
 import NoPointsComponent from '../view/no-points.js';
 import PreloaderComponent from '../view/preloader.js';
 import {INPUT_YEAR_MONTH_DAY_FORMAT} from '../utils/common.js';
@@ -78,7 +78,7 @@ export default class TripDays {
     button.setAttribute(`disabled`, `true`);
 
     const container = this._tripDaysComponent.getElement();
-    this._creatingPoint = new PointController(container, this._dataChangeHandler, this._viewChangeHandler, button);
+    this._creatingPoint = new PointPresenter(container, this._dataChangeHandler, this._viewChangeHandler, button);
     this._creatingPoint.render(EmptyPoint, PointControllerMode.ADDING);
   }
 
@@ -123,7 +123,7 @@ export default class TripDays {
 
         if (pointDate === day.getTime()) {
           const tripEventsListElement = this._tripDayComponent.getElement().querySelector(`.trip-events__list`);
-          const pointController = new PointController(tripEventsListElement, this._dataChangeHandler, this._viewChangeHandler);
+          const pointController = new PointPresenter(tripEventsListElement, this._dataChangeHandler, this._viewChangeHandler);
           pointController.render(point, PointControllerMode.DEFAULT);
           this._showedPointsControllers = this._showedPointsControllers.concat(pointController);
         }
@@ -139,7 +139,7 @@ export default class TripDays {
     const container = this._tripDayComponent.getElement().querySelector(`.trip-events__list`);
 
     for (const point of sortPointsList) {
-      const pointController = new PointController(container, this._dataChangeHandler, this._viewChangeHandler);
+      const pointController = new PointPresenter(container, this._dataChangeHandler, this._viewChangeHandler);
       pointController.render(point, PointControllerMode.DEFAULT);
       this._showedPointsControllers = this._showedPointsControllers.concat(pointController);
     }

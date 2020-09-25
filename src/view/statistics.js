@@ -6,8 +6,8 @@ import {calculateTripDuration} from "../utils/common";
 const BAR_HEIGHT = 55;
 const ICON_SIZE = 20;
 
-const getUniqueTripTypes = (type, index, assemble) => {
-  return assemble.indexOf(type) === index;
+const getUniqueTripTypes = (type, index, elements) => {
+  return elements.indexOf(type) === index;
 };
 
 const calculateUniqueCost = (points, type) => {

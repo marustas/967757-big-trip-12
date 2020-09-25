@@ -1,6 +1,6 @@
 import Smart from "./smart.js";
 import {changeFirstLetter} from '../utils/common.js';
-import {Mode as PointControllerMode} from '../presenter/trip-point.js';
+import {Mode as PointControllerMode} from '../presenter/point-controller.js';
 import Destination from '../model/destination.js';
 import Offer from '../model/offer.js';
 import Point from "../model/point.js";

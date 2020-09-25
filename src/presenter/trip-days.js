@@ -3,7 +3,7 @@ import TripDaysComponent from '../view/trip-days.js';
 import SortComponent, {SortTypes} from '../view/sort.js';
 import TripsContainerComponent from '../view/trips-container.js';
 import {render, remove} from '../utils/render.js';
-import PointController, {Mode as PointControllerMode, EmptyPoint} from '../presenter/trip-point.js';
+import PointController, {Mode as PointControllerMode, EmptyPoint} from './point-controller.js';
 import NoPointsComponent from '../view/no-points.js';
 import PreloaderComponent from '../view/preloader.js';
 import {INPUT_YEAR_MONTH_DAY_FORMAT} from '../utils/common.js';

@@ -222,20 +222,12 @@ export default class PointController {
 
   renameSaveButton(status = true) {
     const saveButton = this._formComponent.getElement().querySelector(`.event__save-btn`);
-    if (status) {
-      saveButton.textContent = `Saving...`;
-    } else {
-      saveButton.textContent = `Save`;
-    }
+    saveButton.textContent = status ? `Saving...` : `Save`;
   }
 
   renameDeleteButton(status = true) {
     const deleteButton = this._formComponent.getElement().querySelector(`.event__reset-btn`);
-    if (status) {
-      deleteButton.textContent = `Deleting...`;
-    } else {
-      deleteButton.textContent = `Delete`;
-    }
+    deleteButton.textContent = status ? `Deleting...` : `Delete`;
   }
 
   destroy() {
